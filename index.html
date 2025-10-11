@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About Me - Data Scientist</title>
+  <meta name="description" content="3D interactive data scientist profile with light/dark mode, spider web background."/>
+  <style>
+    :root {
+      --bg: #0f1724;
+      --accent: #06b6d4;
+      --muted: #94a3b8;
+      --text: #e6eef8;
+      --card-bg: rgba(11, 18, 32, 0.35);
+      --shadow: rgba(2, 6, 23, 0.7);
+    }
+
+    body.light-mode {
+      --bg: #e7eff9;
+      --accent: #0ea5e9;
+      --muted: #475569;
+      --text: #0f1724;
+      --card-bg: rgba(255, 255, 255, 0.6);
+      --shadow: rgba(15, 23, 42, 0.2);
+    }
+
+    * { box-sizing: border-box; }
+html, body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg), #071028);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;   /* content starts at top */
+  overflow-y: auto;          /* allows scrolling */
+  padding: 40px 0;           /* adds breathing room top and bottom */
+  transition: background 0.6s ease, color 0.6s ease;
+}
+
+
+    /* Canvas background */
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* Mode toggle button */
+    .mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 25px;
+      z-index: 10;
+      background: var(--card-bg);
+      color: var(--accent);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: all 0.4s ease;
+    }
+
+    .mode-toggle:hover {
+      transform: scale(1.05);
+      background: rgba(6, 182, 212, 0.15);
+    }
+
+    .card-3d {
+      width: 100%;
+      max-width: 480px;
+      perspective: 1200px;
+      z-index: 1;
+    }
+
+    .card-inner {
+      width: 100%;
+      min-height: 520px;
+      border-radius: 18px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 40px var(--shadow);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 400ms cubic-bezier(.2, .9, .2, 1), background 0.6s ease;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2vw;
+    }
+
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0b1220, rgba(255, 255, 255, 0.02));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 8px 20px rgba(3, 10, 20, 0.6);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .name { font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+    .role { color: var(--muted); font-size: 18px; text-align: center; margin-bottom: 8px; }
+    .bio { font-size: 16px; color: var(--text); line-height: 1.4; text-align: center; margin-bottom: 12px; }
+    .meta-panel { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .meta-panel .chip { font-size: 16px; color: var(--muted); }
+    .meta-panel .chip.accent { color: var(--accent); font-weight: 700; }
+
+    .social-icons { display: flex; gap: 8px; margin-bottom: 12px; justify-content: center; }
+    .social-icons img { width: 22px; height: 22px; filter: invert(0.8); transition: transform 0.3s ease; }
+    .social-icons img:hover { transform: scale(1.2); }
+
+    .skills { margin-bottom: 16px; }
+    .skills h3 { text-align: center; margin-bottom: 8px; color: var(--accent); }
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .skills-list span {
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--accent);
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .skills-list span:hover {
+      transform: scale(1.05);
+      background: rgba(6, 182, 212, 0.3);
+    }
+
+    .contact { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      background: linear-gradient(90deg, var(--accent), #3b82f6);
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: #042027;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .ghost {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 8px;
+      border-radius: 10px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    @media (min-width:1024px) {
+      .avatar { width: 200px; height: 200px; }
+      .name { font-size: 36px; }
+      .role { font-size: 20px; }
+      .bio { font-size: 18px; }
+      .meta-panel .chip { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="spiderCanvas"></canvas>
+  <button class="mode-toggle" id="modeToggle">🌙 Dark</button>
+
+  <div class="card-3d" id="cardWrap">
+    <div class="card-inner" id="card">
+      <div class="avatar"><img src="PROFILE.jpg" alt="avatar"></div>
+      <div class="name">Sandesh Khatri</div>
+      <div class="role">Data Scientist</div>
+      <div class="bio">
+        Innovative data scientist and developer with 4+ years of experience in building scalable web and ML solutions. Skilled in HTML, CSS, Java, and Python. I love transforming data into actionable insights and crafting interactive user experiences.
+      </div>
+      <div class="meta-panel">
+        <div class="chip">Open to: Freelance · Full-time</div>
+        <div class="chip accent">Remote</div>
+      </div>
+      <div class="social-icons">
+        <a href="mailto:you@example.com" title="Email"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email" /></a>
+        <a href="https://github.com/yourusername" target="_blank" title="GitHub"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" /></a>
+        <a href="https://youtube.com/yourchannel" target="_blank" title="YouTube"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" /></a>
+        <a href="https://facebook.com/yourprofile" target="_blank" title="Facebook"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" /></a>
+        <a href="https://www.tiktok.com/@yourprofile" target="_blank" title="TikTok"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" /></a>
+        <a href="https://instagram.com/yourprofile" target="_blank" title="Instagram"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" /></a>
+      </div>
+      <div class="skills">
+        <h3>Skills</h3>
+        <div class="skills-list">
+          <span>Data Analysis</span><span>Data Visualization</span><span>Machine Learning</span>
+          <span>Deep Learning</span><span>Python</span><span>SQL</span><span>FastAPI/Docker</span>
+        </div>
+      </div>
+      <h3>Contact Me</h3>
+      <div class="contact">
+        <a class="btn" href="khatrijr01@gmail.com">Email</a>
+        <a class="ghost" href="https://github.com/LAFFI01" target="_blank">GitHub</a>
+        <a class="ghost" href="https://www.youtube.com/@IAMAI-f5k?sub_confirmation=1" target="_blank">YouTube</a>
+        <a class="ghost" href="https://facebook.com/sandesh.khatri.631170" target="_blank">Facebook</a>
+        <a class="ghost" href="https://www.tiktok.com/@laffi.01?is_from_webapp=1&sender_device=pc" target="_blank">TikTok</a>
+        <a class="ghost" href="https://instagram.com/laffi_01" target="_blank">Instagram</a>
+        <a class="ghost" href="https://linkedin.com/in/sandesh-khatri-a58457284" target="_blank">LinkedIn</a>
+        <a class="ghost" href="https://twitter.com/laffi1111" target="_blank">Twitter</a>
+        <!-- <a class="ghost" href="#" id="downloadBtn">Download CV</a> -->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mode toggle
+    const toggleBtn = document.getElementById('modeToggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      toggleBtn.textContent = document.body.classList.contains('light-mode') ? '☀️ Light' : '🌙 Dark';
+    });
+
+    // 3D tilt
+    const card = document.getElementById('card');
+    const wrap = document.getElementById('cardWrap');
+    wrap.addEventListener('mousemove', e => {
+      const rect = wrap.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+      const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+      card.style.transform = `rotateY(${x * 18}deg) rotateX(${-y * 14}deg)`;
+    });
+    wrap.addEventListener('mouseleave', () => { card.style.transform = 'rotateY(0) rotateX(0)'; });
+
+    // Spider web animation
+    const canvas = document.getElementById('spiderCanvas');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    window.addEventListener('resize', ()=>{w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;});
+    const nodes = [], rows = 6, cols = 10;
+    for(let i=0;i<rows;i++){nodes[i]=[];for(let j=0;j<cols;j++){nodes[i][j]={x:50+j*(w-100)/(cols-1),y:50+i*(h-100)/(rows-1)};}}
+    class Spider{constructor(){this.x=Math.random()*w;this.y=Math.random()*h;this.size=5+Math.random()*3;this.a=Math.random()*Math.PI*2;this.s=0.5+Math.random()*0.5;}
+      update(){this.x+=Math.cos(this.a)*this.s;this.y+=Math.sin(this.a)*this.s;if(this.x<0||this.x>w)this.a=Math.PI-this.a;if(this.y<0||this.y>h)this.a=-this.a;}
+      draw(){ctx.save();ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle='#06b6d4';ctx.shadowColor='#06b6d4';ctx.shadowBlur=10;ctx.fill();ctx.restore();}}
+    const spiders=[];for(let i=0;i<8;i++)spiders.push(new Spider());
+    function animate(){ctx.clearRect(0,0,w,h);
+      for(let i=0;i<rows;i++){for(let j=0;j<cols-1;j++){ctx.beginPath();ctx.moveTo(nodes[i][j].x,nodes[i][j].y);ctx.lineTo(nodes[i][j+1].x,nodes[i][j+1].y);ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.stroke();}}
+      for(let j=0;j<cols;j++){for(let i=0;i<rows-1;i++){ctx.beginPath();ctx.moveTo(nodes[i][j].x,nodes[i][j].y);ctx.lineTo(nodes[i+1][j].x,nodes[i+1][j].y);ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.stroke();}}
+      spiders.forEach(s=>{s.update();s.draw();});requestAnimationFrame(animate);}
+    animate();
+  </script>
+</body>
+</html>
