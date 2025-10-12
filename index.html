@@ -40,43 +40,60 @@ html, body {
 }
 
 
-    /* Canvas background */
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
+canvas#spiderCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  filter: blur(8px); /* blur the background image */
+}
+.mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 25px;
+  z-index: 20;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  border-radius: 50%; /* makes it perfectly circular */
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px); /* subtle glow blending */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 12px rgba(167, 237, 52, 0.6); /* glowing ring */
+}
 
-    /* Mode toggle button */
-    .mode-toggle {
-      position: fixed;
-      top: 20px;
-      right: 25px;
-      z-index: 10;
-      background: var(--card-bg);
-      color: var(--accent);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 20px var(--shadow);
-      transition: all 0.4s ease;
-    }
+.mode-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgb(184, 224, 7);
+}
 
-    .mode-toggle:hover {
-      transform: scale(1.05);
-      background: rgba(6, 182, 212, 0.15);
-    }
+.mode-toggle img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: none;
+}
+
+
 
     .card-3d {
       width: 100%;
       max-width: 480px;
       perspective: 1200px;
       z-index: 1;
+      position: relative;
     }
 
     .card-inner {
@@ -97,32 +114,136 @@ html, body {
       justify-content: center;
       padding: 2vw;
     }
+    .card-inner {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+}
 
-    .avatar {
-      width: 150px;
-      height: 150px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #0b1220, rgba(255, 255, 255, 0.02));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      box-shadow: 0 8px 20px rgba(3, 10, 20, 0.6);
-      overflow: hidden;
-      margin-bottom: 12px;
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+    .card-inner:hover {
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
     }
 
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .name { font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+
+/* Profile glow */
+.avatar {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #0b1220, rgba(255, 255, 255, 0.02));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 8px 20px rgba(3, 10, 20, 0.6);
+  overflow: hidden;
+  margin-bottom: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* The glow pseudo-element */
+.avatar::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;       /* slightly larger than avatar */
+  height: 180px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6,182,212,0.5) 0%, rgba(6,182,212,0) 60%);
+  filter: blur(15px);
+  opacity: 0.7;
+  animation: pulse 2.5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* Pulse animation for glowing effect */
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+  100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+}
+
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;       /* smooth and clear */
+  filter: contrast(1.05) brightness(1.05); /* subtle clarity boost */
+  backface-visibility: hidden; /* sharper rendering */
+  transition: transform 0.003s ease, filter 0.003s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 30px rgba(3, 10, 20, 0.7);
+}
+
+.avatar:hover img {
+  filter: contrast(1.1) brightness(1.1); /* pop effect on hover */
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+}
+/* Particle Name Effect */
+#particleName {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--accent);
+  position: relative;
+  letter-spacing: 2px;
+  overflow: visible;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: float 1.2s ease forwards;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); opacity: 0.8; }
+  100% { transform: translate(0, -30px); opacity: 0; }
+}
+
+
+
+
     .role { color: var(--muted); font-size: 18px; text-align: center; margin-bottom: 8px; }
     .bio { font-size: 16px; color: var(--text); line-height: 1.4; text-align: center; margin-bottom: 12px; }
     .meta-panel { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 12px; }
     .meta-panel .chip { font-size: 16px; color: var(--muted); }
     .meta-panel .chip.accent { color: var(--accent); font-weight: 700; }
 
-    .social-icons { display: flex; gap: 8px; margin-bottom: 12px; justify-content: center; }
-    .social-icons img { width: 22px; height: 22px; filter: invert(0.8); transition: transform 0.3s ease; }
-    .social-icons img:hover { transform: scale(1.2); }
+    .social-icons { display: flex; gap: 15px; margin-bottom: 12px; justify-content: center; }
+    .social-icons img { width: 28px; height: 28px; filter: invert(0.8); transition: transform 0.3s ease; }
+    .social-icons img:hover { transform: scale(1.3); }
 
     .skills { margin-bottom: 16px; }
     .skills h3 { text-align: center; margin-bottom: 8px; color: var(--accent); }
@@ -164,38 +285,154 @@ html, body {
       text-decoration: none;
     }
 
-    @media (min-width:1024px) {
-      .avatar { width: 200px; height: 200px; }
-      .name { font-size: 36px; }
-      .role { font-size: 20px; }
-      .bio { font-size: 18px; }
-      .meta-panel .chip { font-size: 18px; }
-    }
+@media (max-width: 480px) {
+  .card-inner {
+    padding: 16px;
+    min-height: 420px;
+  }
+  .avatar { width: 120px; height: 120px; }
+  .name { font-size: 26px; }
+  .role { font-size: 16px; }
+  .bio { font-size: 14px; }
+}
+
+#borderSpider {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  animation: moveSpider 20s linear infinite;
+  filter: drop-shadow(0 0 10px red)
+  ;
+  transform-origin: center center;
+}
+
+@keyframes moveSpider {
+  0%   { top: 0; left: 0; transform: rotate(180deg); }        /* top-left flipped */
+  12.5% { top: 0; left: 50%; transform: rotate(180deg); }     /* top-middle flipped */
+  25%  { top: 0; left: calc(100% - 50px); transform: rotate(180deg); } /* top-right flipped */
+  37.5% { top: 50%; left: calc(100% - 50px); transform: rotate(0deg); } /* right-side normal */
+  50%  { top: calc(100% - 50px); left: calc(100% - 50px); transform: rotate(0deg); } /* bottom-right normal */
+  62.5% { top: calc(100% - 50px); left: 50%; transform: rotate(0deg); } /* bottom-middle normal */
+  75%  { top: calc(100% - 50px); left: 0; transform: rotate(0deg); } /* bottom-left normal */
+  87.5% { top: 50%; left: 0; transform: rotate(0deg); }       /* left-side normal */
+  100% { top: 0; left: 0; transform: rotate(180deg); }         /* back to top-left flipped */
+}
+.particle {
+  position: absolute;
+  font-weight: bold;
+  pointer-events: none;
+  animation: float 1.5s ease forwards;
+  opacity: 0.8;
+}
+
+@keyframes float {
+  0% { transform: translate(0,0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translate(0,-40px) rotate(360deg); opacity: 0; }
+}
+
+/* Floating lights around border */
+@keyframes floating-lights {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  50% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 0.8; }
+}
+
+.border-lights {
+  position: absolute;
+  inset: -15px; /* slightly outside the box */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.border-lights span {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,255,1), rgba(0,255,255,0));
+  box-shadow: 0 0 15px rgba(0,255,255,0.7);
+  animation: floating-lights 3s ease-in-out infinite;
+}
+
+/* Random positions for each light */
+.border-lights span:nth-child(1) { top: -5px; left: 10%; animation-delay: 0s; }
+.border-lights span:nth-child(2) { top: -5px; right: 15%; animation-delay: 0.5s; }
+.border-lights span:nth-child(3) { bottom: -5px; left: 20%; animation-delay: 1s; }
+.border-lights span:nth-child(4) { bottom: -5px; right: 25%; animation-delay: 1.5s; }
+.border-lights span:nth-child(5) { top: 40%; left: -5px; animation-delay: 2s; }
+.border-lights span:nth-child(6) { top: 60%; right: -5px; animation-delay: 2.5s; }
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(3px);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: var(--text);
+  position: relative;
+}
+
+.modal-content input {
+  width: 80%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.modal-content button {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--accent);
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
   </style>
 </head>
 <body>
   <canvas id="spiderCanvas"></canvas>
-  <button class="mode-toggle" id="modeToggle">🌙 Dark</button>
+<img src="btn.jpg" id="modeToggle" class="mode-toggle" alt="Mode Toggle" />
 
   <div class="card-3d" id="cardWrap">
     <div class="card-inner" id="card">
       <div class="avatar"><img src="PROFILE.jpg" alt="avatar"></div>
-      <div class="name">Sandesh Khatri</div>
+      <div class="name" id="particleName">Sandesh Khatri</div>
       <div class="role">Data Scientist</div>
       <div class="bio">
-      Passionate about learning and applying AI and machine learning to solve real-world problems. Eager to build predictive models, explore data, and grow as a skilled data professional.
+        Passionate about learning and applying AI and machine learning to solve real-world problems. Eager to build predictive models, explore data, and grow as a skilled data professional.
       </div>
       <div class="meta-panel">
         <div class="chip">Open to: Freelance · Full-time</div>
         <div class="chip accent">Remote</div>
-      </div>
-      <div class="social-icons">
-        <a href="mailto:codeaiaiai@gmail.com" title="Email"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email" /></a>
-        <a href="https://github.com/LAFFI01" target="_blank" title="GitHub"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" /></a>
-        <a href="https://youtube.com/@IAMAI-f5k" target="_blank" title="YouTube"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" /></a>
-        <a href="https://facebook.com/sandesh.khatri.631170" target="_blank" title="Facebook"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" /></a>
-        <a href="https://www.tiktok.com/@laffi.01" target="_blank" title="TikTok"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" /></a>
-        <a href="https://instagram.com/laffi_01" target="_blank" title="Instagram"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" /></a>
       </div>
       <div class="skills">
         <h3>Skills</h3>
@@ -206,27 +443,64 @@ html, body {
       </div>
       <h3>Contact Me</h3>
       <div class="contact">
-        <a class="btn" href="codeaiaiai@gmail.com">Email</a>
-        <a class="ghost" href="https://github.com/LAFFI01" target="_blank">GitHub</a>
-        <a class="ghost" href="https://www.youtube.com/@IAMAI-f5k?sub_confirmation=1" target="_blank">YouTube</a>
-        <a class="ghost" href="https://facebook.com/sandesh.khatri.631170" target="_blank">Facebook</a>
-        <a class="ghost" href="https://www.tiktok.com/@laffi.01?is_from_webapp=1&sender_device=pc" target="_blank">TikTok</a>
-        <a class="ghost" href="https://instagram.com/laffi_01" target="_blank">Instagram</a>
-        <a class="ghost" href="https://linkedin.com/in/sandesh-khatri-a58457284" target="_blank">LinkedIn</a>
-        <a class="ghost" href="https://twitter.com/laffi1111" target="_blank">Twitter</a>
-        <!-- <a class="ghost" href="#" id="downloadBtn">Download CV</a> -->
+        <button class="btn" id="emailBtn">Email</button>
+<div class="social-icons">
+<a href="https://mail.google.com/mail/?view=cm&to=khatrijr01@gmail.com&su=Hello%20Sandesh&body=I%20want%20to%20connect%20with%20you." 
+   target="_blank" title="Email">
+  <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email" />
+</a>
+  <a href="https://github.com/LAFFI01" title="GitHub" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" />
+  </a>
+  <a href="https://www.youtube.com/@IAMAI-f5k?sub_confirmation=1" title="YouTube" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" />
+  </a>
+  <a href="https://facebook.com/sandesh.khatri.631170" title="Facebook" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" />
+  </a>
+  <a href="https://www.tiktok.com/@laffi.01?is_from_webapp=1&sender_device=pc" title="TikTok" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok" />
+  </a>
+  <a href="https://instagram.com/laffi_01" title="Instagram" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" />
+  </a>
+  <a href="https://linkedin.com/in/sandesh-khatri-a58457284" title="LinkedIn" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" />
+  </a>
+  <a href="https://twitter.com/laffi1111" title="Twitter" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" />
+  </a>
+</div>
       </div>
+      <div id="emailModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Copy my email:</p>
+    <input type="text" value="khatrijr01@gmail.com" id="emailInput" readonly>
+    <button id="copyBtn">Copy</button>
+  </div>
+</div>
+          <img id="borderSpider" src="spider.png" alt="spider" />
+<div class="border-lights">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
       </div>
     </div>
   </div>
 
   <script>
     // Mode toggle
-    const toggleBtn = document.getElementById('modeToggle');
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      toggleBtn.textContent = document.body.classList.contains('light-mode') ? '☀️ Light' : '🌙 Dark';
-    });
+const toggleBtn = document.getElementById('modeToggle');
+toggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+});
+
 
     // 3D tilt
     const card = document.getElementById('card');
@@ -247,17 +521,156 @@ html, body {
     window.addEventListener('resize', ()=>{w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;});
     const nodes = [], rows = 6, cols = 10;
     for(let i=0;i<rows;i++){nodes[i]=[];for(let j=0;j<cols;j++){nodes[i][j]={x:50+j*(w-100)/(cols-1),y:50+i*(h-100)/(rows-1)};}}
-    class Spider{constructor(){this.x=Math.random()*w;this.y=Math.random()*h;this.size=5+Math.random()*3;this.a=Math.random()*Math.PI*2;this.s=0.5+Math.random()*0.5;}
-      update(){this.x+=Math.cos(this.a)*this.s;this.y+=Math.sin(this.a)*this.s;if(this.x<0||this.x>w)this.a=Math.PI-this.a;if(this.y<0||this.y>h)this.a=-this.a;}
-      draw(){ctx.save();ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle='#06b6d4';ctx.shadowColor='#06b6d4';ctx.shadowBlur=10;ctx.fill();ctx.restore();}}
-    const spiders=[];for(let i=0;i<8;i++)spiders.push(new Spider());
-    function animate(){ctx.clearRect(0,0,w,h);
-      for(let i=0;i<rows;i++){for(let j=0;j<cols-1;j++){ctx.beginPath();ctx.moveTo(nodes[i][j].x,nodes[i][j].y);ctx.lineTo(nodes[i][j+1].x,nodes[i][j+1].y);ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.stroke();}}
-      for(let j=0;j<cols;j++){for(let i=0;i<rows-1;i++){ctx.beginPath();ctx.moveTo(nodes[i][j].x,nodes[i][j].y);ctx.lineTo(nodes[i+1][j].x,nodes[i+1][j].y);ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.stroke();}}
-      spiders.forEach(s=>{s.update();s.draw();});requestAnimationFrame(animate);}
-    animate();
+class MathSymbol {
+  constructor() {
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+    this.symbols = ['∂', 'Σ', '∫', 'π', 'θ', '√', '∞', 'λ', '∆', 'α', 'β'];
+    this.text = this.symbols[Math.floor(Math.random() * this.symbols.length)];
+    this.size = 14 + Math.random() * 12;
+    this.a = Math.random() * Math.PI * 2;
+    this.s = 0.2 + Math.random() * 0.4;
+    this.opacity = 0.3 + Math.random() * 0.6;
+    this.rotate = Math.random() * 360;
+  }
+
+  update() {
+    this.x += Math.cos(this.a) * this.s;
+    this.y += Math.sin(this.a) * this.s;
+    this.rotate += 0.5; // slow rotation
+
+    if (this.x < -50) this.x = w + 50;
+    if (this.x > w + 50) this.x = -50;
+    if (this.y < -50) this.y = h + 50;
+    if (this.y > h + 50) this.y = -50;
+  }
+
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate((this.rotate * Math.PI) / 180);
+    ctx.font = `${this.size}px 'Times New Roman', serif`;
+    ctx.fillStyle = `rgba(6,182,212,${this.opacity})`;
+    ctx.shadowColor = '#06b6d4';
+    ctx.shadowBlur = 8;
+    ctx.fillText(this.text, 0, 0);
+    ctx.restore();
+  }
+}
+
+const mathSymbols = [];
+for (let i = 0; i < 25; i++) mathSymbols.push(new MathSymbol());
+
+function animate() {
+  ctx.clearRect(0, 0, w, h);
+
+  // Draw web lines (same)
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols - 1; j++) {
+      ctx.beginPath();
+      ctx.moveTo(nodes[i][j].x, nodes[i][j].y);
+      ctx.lineTo(nodes[i][j + 1].x, nodes[i][j + 1].y);
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.stroke();
+    }
+  }
+  for (let j = 0; j < cols; j++) {
+    for (let i = 0; i < rows - 1; i++) {
+      ctx.beginPath();
+      ctx.moveTo(nodes[i][j].x, nodes[i][j].y);
+      ctx.lineTo(nodes[i + 1][j].x, nodes[i + 1][j].y);
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.stroke();
+    }
+  }
+
+  // Animate symbols instead of spiders
+  mathSymbols.forEach((s) => {
+    s.update();
+    s.draw();
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+    const nameEl = document.getElementById('particleName');
+const nameText = nameEl.textContent;
+nameEl.textContent = ''; // Clear original text
+
+let index = 0;
+
+function generateParticle(x, y) {
+  const particle = document.createElement('span');
+  particle.className = 'particle';
+  particle.style.left = x + 'px';
+  particle.style.top = y + 'px';
+  document.body.appendChild(particle);
+  setTimeout(() => particle.remove(), 1200);
+}
+
+function typeName() {
+  if (index < nameText.length) {
+    const span = document.createElement('span');
+    span.textContent = nameText[index];
+    nameEl.appendChild(span);
+
+    // Generate multiple particles for each letter
+    const rect = span.getBoundingClientRect();
+    for (let i = 0; i < 5; i++) {
+      const offsetX = Math.random() * rect.width - rect.width/2;
+      const offsetY = Math.random() * rect.height - rect.height/2;
+      generateParticle(rect.left + offsetX, rect.top + offsetY);
+    }
+
+    index++;
+    setTimeout(typeName, 150);
+  }
+}
+
+typeName();
+function generateParticle(x, y) {
+  const particle = document.createElement('span');
+  particle.className = 'particle';
+
+  // List of math symbols
+  const symbols = ['∂', '∫', 'Σ', 'π', '∞', '√', '∆', 'θ', 'λ', 'α', 'β'];
+  particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+  particle.style.left = x + 'px';
+  particle.style.top = y + 'px';
+  particle.style.fontSize = (12 + Math.random()*12) + 'px'; // random size
+  particle.style.color = 'var(--accent)';
+  document.body.appendChild(particle);
+
+  setTimeout(() => particle.remove(), 1500);
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("emailModal");
+  const emailBtn = document.getElementById("emailBtn");
+  const close = document.querySelector(".close");
+  const copyBtn = document.getElementById("copyBtn");
+  const emailInput = document.getElementById("emailInput");
+
+  // Open modal ONLY when Email button is clicked
+  if(emailBtn) emailBtn.onclick = () => { modal.style.display = "flex"; }
+
+  // Close modal
+  if(close) close.onclick = () => { modal.style.display = "none"; }
+  window.onclick = (event) => { 
+    if (event.target === modal) modal.style.display = "none"; 
+  }
+
+  // Copy email
+  if(copyBtn) copyBtn.onclick = () => {
+    emailInput.select();
+    emailInput.setSelectionRange(0, 99999); // for mobile
+    navigator.clipboard.writeText(emailInput.value);
+    alert("Email copied: " + emailInput.value);
+  }
+});
+
+
   </script>
 </body>
 </html>
-
-
