@@ -235,7 +235,7 @@ canvas#spiderCanvas {
 
 
 
-    .role { color: var(--muted); font-size: 18px; text-align: center; margin-bottom: 8px; }
+    .role { color: var(--accent); font-size: 18px; text-align: center; margin-bottom: 8px; }
     .bio { font-size: 16px; color: var(--text); line-height: 1.4; text-align: center; margin-bottom: 12px; }
     .meta-panel { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 12px; }
     .meta-panel .chip { font-size: 16px; color: var(--muted); }
@@ -426,7 +426,7 @@ canvas#spiderCanvas {
     <div class="card-inner" id="card">
       <div class="avatar"><img src="PROFILE.jpg" alt="avatar"></div>
       <div class="name" id="particleName">Sandesh Khatri</div>
-      <div class="role">Data Scientist</div>
+      <div class="role" id="particleRole">Data Scientist</div>
       <div class="bio">
         Passionate about learning and applying AI and machine learning to solve real-world problems. Eager to build predictive models, explore data, and grow as a skilled data professional.
       </div>
@@ -521,6 +521,7 @@ toggleBtn.addEventListener('click', () => {
     window.addEventListener('resize', ()=>{w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;});
     const nodes = [], rows = 6, cols = 10;
     for(let i=0;i<rows;i++){nodes[i]=[];for(let j=0;j<cols;j++){nodes[i][j]={x:50+j*(w-100)/(cols-1),y:50+i*(h-100)/(rows-1)};}}
+
 class MathSymbol {
   constructor() {
     this.x = Math.random() * w;
@@ -593,20 +594,27 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
-
-    const nameEl = document.getElementById('particleName');
+const nameEl = document.getElementById('particleName');
+const roleEl = document.getElementById('particleRole');
 const nameText = nameEl.textContent;
-nameEl.textContent = ''; // Clear original text
+const roleText = roleEl.textContent;
 
 let index = 0;
+let roleIndex = 0;
 
-function generateParticle(x, y) {
+nameEl.textContent = ''; // clear name initially
+roleEl.textContent = ''; // clear role initially
+
+function generateParticle(x, y, symbolList) {
   const particle = document.createElement('span');
   particle.className = 'particle';
+  particle.textContent = symbolList[Math.floor(Math.random() * symbolList.length)];
   particle.style.left = x + 'px';
   particle.style.top = y + 'px';
+  particle.style.fontSize = (12 + Math.random() * 12) + 'px';
+  particle.style.color = 'var(--accent)';
   document.body.appendChild(particle);
-  setTimeout(() => particle.remove(), 1200);
+  setTimeout(() => particle.remove(), 1500);
 }
 
 function typeName() {
@@ -615,20 +623,53 @@ function typeName() {
     span.textContent = nameText[index];
     nameEl.appendChild(span);
 
-    // Generate multiple particles for each letter
     const rect = span.getBoundingClientRect();
     for (let i = 0; i < 5; i++) {
-      const offsetX = Math.random() * rect.width - rect.width/2;
-      const offsetY = Math.random() * rect.height - rect.height/2;
-      generateParticle(rect.left + offsetX, rect.top + offsetY);
+      const offsetX = Math.random() * rect.width - rect.width / 2;
+      const offsetY = Math.random() * rect.height - rect.height / 2;
+      generateParticle(rect.left + offsetX, rect.top + offsetY, ['∂', '∫', 'Σ', 'π', '∞', '√', '∆', 'θ', 'λ', 'α', 'β']);
     }
 
     index++;
     setTimeout(typeName, 150);
+  } else {
+    setTimeout(typeRole, 200); // slight delay before profession
   }
 }
 
-typeName();
+function typeRole() {
+  if (roleIndex < roleText.length) {
+    const span = document.createElement('span');
+    span.textContent = roleText[roleIndex];
+    roleEl.appendChild(span);
+
+    const rect = span.getBoundingClientRect();
+    for (let i = 0; i < 5; i++) {
+      const offsetX = Math.random() * rect.width - rect.width / 2;
+      const offsetY = Math.random() * rect.height - rect.height / 2;
+      generateParticle(rect.left + offsetX, rect.top + offsetY, ['∂', '∫', 'Σ', 'π', '∞', '√', '∆', 'θ', 'λ', 'α', 'β']);
+    }
+
+    roleIndex++;
+    setTimeout(typeRole, 150);
+  } else {
+    // Repeat the whole animation after 10 seconds
+    setTimeout(resetAnimation, 10000);
+  }
+}
+
+function resetAnimation() {
+  // Clear existing text
+  nameEl.textContent = '';
+  roleEl.textContent = '';
+  index = 0;
+  roleIndex = 0;
+  typeName(); // start over
+}
+
+typeName(); // initial call
+
+
 function generateParticle(x, y) {
   const particle = document.createElement('span');
   particle.className = 'particle';
