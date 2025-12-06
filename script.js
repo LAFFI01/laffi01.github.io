@@ -1,32 +1,22 @@
 // Initialize theme from localStorage
 const initTheme = () => {
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
-    document.getElementById('bg-dark').style.opacity = '0';
-    document.getElementById('bg-light').style.opacity = '1';
-  }
-  return savedTheme;
+  // Always start in dark mode for a new session.
+  localStorage.removeItem('theme');
+  document.body.classList.remove('light-mode');
+  return 'dark';
 };
 
 let currentTheme = initTheme();
 
 // Mode toggle functionality
-const clickSound = document.getElementById('clickSound');
 const modeToggle = document.getElementById('modeToggle');
 modeToggle.addEventListener('click', () => {
   document.body.classList.toggle('light-mode');
   currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
   localStorage.setItem('theme', currentTheme);
 
-  // Update background opacity
-  const isLight = currentTheme === 'light';
-  document.getElementById('bg-dark').style.opacity = isLight ? '0' : '1';
-  document.getElementById('bg-light').style.opacity = isLight ? '1' : '0';
-
-  // Play sound
-  clickSound.currentTime = 0;
-  clickSound.play();
+  // Optional: If you want to add a sound effect, you can add the logic here.
+  // For example: document.getElementById('clickSound').play();
 });
 
 // 3D card tilt effect
@@ -201,36 +191,3 @@ function typeRole() {
 }
 
 typeName();
-
-// Email modal
-const emailBtn = document.getElementById('emailBtn');
-const emailModal = document.getElementById('emailModal');
-const closeBtn = document.querySelector('.close');
-const copyBtn = document.getElementById('copyBtn');
-
-emailBtn.addEventListener('click', () => {
-  emailModal.style.display = 'flex';
-});
-
-closeBtn.addEventListener('click', () => {
-  emailModal.style.display = 'none';
-});
-
-window.addEventListener('click', (event) => {
-  if (event.target == emailModal) {
-    emailModal.style.display = 'none';
-  }
-});
-
-copyBtn.addEventListener('click', async () => {
-  const emailInput = document.getElementById('emailInput');
-  try {
-    await navigator.clipboard.writeText(emailInput.value);
-    copyBtn.textContent = 'Copied!';
-    setTimeout(() => {
-      copyBtn.textContent = 'Copy';
-    }, 2000);
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-  }
-});

@@ -6,6 +6,29 @@
   <title>About Me - Data Scientist</title>
   <meta name="description" content="3D interactive data scientist profile with light/dark mode, spider web background." />
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Basic responsiveness for smaller screens */
+    @media (max-width: 768px) {
+      .card-3d {
+        /* Disable 3D effect on smaller screens for better performance and layout */
+        transform: none !important;
+        width: 90%;
+        margin: 2rem auto;
+      }
+      .card-inner {
+        padding: 1.5rem;
+      }
+      .skills-list {
+        flex-wrap: wrap; /* Allow skills to wrap on smaller screens */
+        justify-content: center;
+      }
+    }
+    @media (max-width: 480px) {
+      #particleName { font-size: 2rem; }
+      #particleRole { font-size: 1.2rem; }
+      .bio { font-size: 0.9rem; }
+    }
+  </style>
 </head>
 <body>
   <canvas id="spiderCanvas"></canvas>
@@ -13,7 +36,7 @@
     <div class="lever-handle"></div>
   </button>
 
-  <div class="card-3d" id="cardWrap">
+  <main class="card-3d" id="cardWrap">
     <div class="card-inner" id="card">
       <div class="avatar"><img src="PROFILE.jpg" alt="avatar"></div>
       <div id="particleName">Sandesh Khatri</div>
@@ -84,7 +107,7 @@
         <span></span>
       </div>
     </div>
-  </div>
+  </main>
 
   <script src="script.js" defer></script>
 </body>
