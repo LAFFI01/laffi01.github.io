@@ -191,3 +191,21 @@ function typeRole() {
 }
 
 typeName();
+
+// Copy Email Button
+const copyEmailBtn = document.getElementById('copyEmailBtn');
+copyEmailBtn.addEventListener('click', () => {
+  const email = 'khatrijr01@gmail.com';
+  navigator.clipboard.writeText(email).then(() => {
+    // Success feedback
+    const originalText = copyEmailBtn.textContent;
+    copyEmailBtn.textContent = 'Copied!';
+    setTimeout(() => {
+      copyEmailBtn.textContent = originalText;
+    }, 2000); // Revert back after 2 seconds
+  }).catch(err => {
+    // Error feedback
+    console.error('Failed to copy email: ', err);
+    alert('Failed to copy email. Please copy it manually: ' + email);
+  });
+});
