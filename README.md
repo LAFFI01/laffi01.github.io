@@ -36,14 +36,6 @@ Here are some of my key GitHub projects:
   <img src="https://skillicons.dev/icons?i=python,pandas,numpy,sklearn,tensorflow,matplotlib,seaborn,mysql,fastapi,docker,jupyter" />
 </p>
 
----
-
-### 📊 My GitHub Stats
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=laffi01&show_icons=true&theme=radical" alt="laffi01's GitHub stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=laffi01&layout=compact&theme=radical" alt="Top Languages" />
-</p>
 
 ---
 
