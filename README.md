@@ -1,52 +1,63 @@
-<h1 align="center">Hi there, I'm Sandesh Khatri 👋</h1>
+<h1 align="center">Hi 👋, I'm Sandesh Khatri</h1>
 
 <p align="center">
-  <em>Passionate about AI and machine learning. I love turning data into insights and building intelligent systems that solve real‑world problems.</em>
+  <em>
+    AI & Machine Learning Enthusiast • Data Science Learner • Turning data into intelligent solutions
+  </em>
+</p>
+
+<p align="center">
+  <a href="https://laffi01.github.io/"><b>🌐 Portfolio</b></a> •
+  <a href="https://linkedin.com/in/sandesh-khatri-a58457284"><b>LinkedIn</b></a> •
+  <a href="https://github.com/LAFFI01"><b>GitHub</b></a>
 </p>
 
 ---
 
-### 👨‍💻 About Me
+## 👨‍💻 About Me
 
-- 🔭 I’m currently working on **projects in machine learning, deep learning, and data analysis**
-- 🌱 I’m currently learning **FastAPI, Docker, and Advanced ML techniques**
-- 👯 I’m looking to collaborate on **ML/AI and data‑driven applications**
-- 💬 Ask me about **Python, ML, Deep Learning, Data Science, SQL, Docker, or FastAPI**
-- 📫 Portfolio & contact: **[https://laffi01.github.io/](https://laffi01.github.io/)**
-- 😄 Pronouns: **He/Him**
-- ⚡ Fun fact: I am Spider Man
+- 🔭 Working on **Machine Learning, Deep Learning & Data Analysis projects**
+- 🌱 Learning **FastAPI, Docker & advanced ML techniques**
+- 🤝 Open to collaboration on **AI/ML & data-driven applications**
+- 💬 Ask me about **Python, ML, Deep Learning, SQL, FastAPI, Docker**
+- ⚡ Fun fact: *I’m Spider-Man* 🕷️
 
 ---
 
-### 🚀 Featured Projects
+## 🚀 Featured Projects
 
-Here are some of my key GitHub projects:
-
-| Project | Description |
-|---------|-------------|
-| 🔍 **[Face Insight DeepFace](https://github.com/LAFFI01/Face_Insight_DeepFace)** | A face analysis project using DeepFace for face recognition, emotion and attribute detection. |
-| 🌍 **[Earthquake Nepal](https://github.com/LAFFI01/Earthquake_Nepal)** | Data analysis and visualization of earthquake events in Nepal with insights on impacts and patterns. |
-| 🎬 **[Movie Recommender](https://github.com/LAFFI01/movie-recommender)** | A movie recommendation system using collaborative filtering & content‑based techniques. |
+| Project | Description | Tech Stack |
+|-------|-------------|------------|
+| 🔍 **[Face Insight – DeepFace](https://github.com/LAFFI01/Face_Insight_DeepFace)** | Face recognition, emotion & attribute analysis using DeepFace. | `Python`, `DeepFace`, `OpenCV` |
+| 🌍 **Earthquake Nepal** | Data analysis & visualization of earthquake patterns in Nepal. | `Python`, `Pandas`, `Matplotlib` |
+| 🎬 **Movie Recommender System** | Recommendation engine using collaborative & content-based filtering. | `Python`, `Scikit-learn`, `Pandas` |
 
 ---
 
-### 🛠️ My Tech Stack
+## 🛠️ Tech Stack
 
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=python,pandas,numpy,sklearn,tensorflow,matplotlib,seaborn,mysql,fastapi,docker,jupyter" />
+<img src="https://skillicons.dev/icons?i=python,numpy,pandas,sklearn,tensorflow,mysql,fastapi,docker,jupyter" />
+
+---
+
+## 📊 GitHub Stats
+
+<p align="center">
+  <img width="48%" src="https://github-readme-stats.vercel.app/api?username=LAFFI01&show_icons=true&theme=radical&hide_border=true" />
+  <img width="48%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=LAFFI01&layout=compact&theme=radical&hide_border=true" />
 </p>
 
+---
+
+### 📊 My GitHub Stats
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=laffi01&show_icons=true&theme=radical" alt="laffi01's GitHub stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=laffi01&layout=compact&theme=radical" alt="Top Languages" />
+</p>
 
 ---
 
-### 🤝 Connect with Me
-
-<p align="left">
-  <a href="https://github.com/LAFFI01" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/github.svg" alt="GitHub" height="30" width="40" /></a>
-  <a href="https://linkedin.com/in/sandesh-khatri-a58457284" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="LinkedIn" height="30" width="40" /></a>
-  <a href="https://twitter.com/laffi1111" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="Twitter" height="30" width="40" /></a>
-  <a href="https://instagram.com/laffi_01" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="Instagram" height="30" width="40" /></a>
-  <a href="https://www.youtube.com/@IAMAI-f5k?sub_confirmation=1" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube" height="30" width="40" /></a>
-  <a href="https://facebook.com/sandesh.khatri.631170" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="Facebook" height="30" width="40" /></a>
-  <a href="https://www.tiktok.com/@laffi.01" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/tiktok.svg" alt="TikTok" height="30" width="40" /></a>
+<p align="center">
+  ⭐ <b>If you like my work, consider starring my repositories!</b>
 </p>
