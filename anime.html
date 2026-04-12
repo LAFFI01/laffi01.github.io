@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Hub - LAFFI_01</title>
+    <meta name="description" content="Explore anime recommendations, reviews, and discussions. Powered by LAFFI_01">
+    <meta name="keywords" content="Anime, Manga, One Piece, Naruto, Reviews">
+    <meta name="author" content="LAFFI_01">
+    <meta property="og:title" content="Anime Hub - Explore Your Favorite Shows">
+    <meta property="og:description" content="Discover anime recommendations and community discussions">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#f44336">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1724 0%, #1a2f4a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff, #b0b0b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateX(-5px);
+        }
+
+        /* Tab Navigation */
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0 40px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: slideDown 0.6s ease 0.2s both;
+        }
+
+        .category-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .category-btn.active {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 0;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .anime-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .anime-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.15);
+        }
+
+        .anime-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #f44336, #ff9800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .anime-content {
+            padding: 20px;
+        }
+
+        .anime-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .anime-genre {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .genre-tag {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.4);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .anime-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .stars {
+            color: #ffb300;
+            font-size: 16px;
+        }
+
+        .anime-description {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+            margin: 12px 0;
+        }
+
+        .anime-btn {
+            width: 100%;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .anime-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .featured {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(200, 200, 200, 0.1));
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            grid-column: span 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .anime-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            .anime-card {
+                height: 100%;
+            }
+
+            .anime-image {
+                height: 200px;
+                font-size: 40px;
+            }
+
+            .anime-content {
+                padding: 15px;
+            }
+
+            .anime-title {
+                font-size: 16px;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Mini Music Player */
+        .mini-music-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            min-width: 280px;
+            animation: slideDown 0.4s ease;
+        }
+
+        .mini-player-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .mini-player-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mini-player-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            transition: color 0.3s ease;
+        }
+
+        .mini-player-close:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .mini-player-track {
+            margin-bottom: 12px;
+        }
+
+        .mini-track-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-track-artist {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-player-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mini-player-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .mini-player-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .mini-player-btn.play-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            font-weight: 700;
+        }
+
+        .mini-player-volume {
+            width: 100%;
+        }
+
+        .mini-volume-slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .mini-volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mini-volume-slider::-webkit-slider-thumb:hover {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        }
+
+        .mini-volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .mini-volume-slider::-moz-range-thumb:hover {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .mini-music-player {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                min-width: auto;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Audio Element (for compatibility with script.js) -->
+    <audio id="backgroundMusic" style="display: none;" preload="auto" crossorigin="anonymous">
+        <source id="audio-source" src="music/hit-the-road.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Mini Music Player -->
+    <div class="mini-music-player" id="miniMusicPlayer">
+        <div class="mini-player-header">
+            <div class="mini-player-title">🎵 Now Playing</div>
+            <button class="mini-player-close" id="closeMiniPlayer">✕</button>
+        </div>
+        <div class="mini-player-track">
+            <div class="mini-track-name" id="miniTrackName">Loading...</div>
+            <div class="mini-track-artist" id="miniTrackArtist">Music</div>
+        </div>
+        <div class="mini-player-controls">
+            <button class="mini-player-btn" id="miniPrevBtn" title="Previous">⏮</button>
+            <button class="mini-player-btn play-btn" id="miniPlayBtn" title="Play/Pause">▶</button>
+            <button class="mini-player-btn" id="miniNextBtn" title="Next">⏭</button>
+            <button class="mini-player-btn" id="miniBackToPlayer" title="Go to Player">🎶</button>
+        </div>
+        <div class="mini-player-volume" style="margin-top: 12px;">
+            <input type="range" id="miniVolumeSlider" class="mini-volume-slider" min="0" max="100" value="100" title="Volume">
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element for Mini Music Player -->
+    <audio id="miniMusicAudio" style="display: none;" preload="auto" crossorigin="anonymous">
+        <source id="miniAudioSource" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <header>
+            <div style="margin-bottom: 20px;">
+                <a href="index.html" class="nav-back">← Back to Portfolio</a>
+            </div>
+            <div class="logo"></div>
+            <h1>ANIME HUB</h1>
+            <p class="subtitle">Discover your next favorite story</p>
+        </header>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="category-btn active" data-category="anime">🎬 Anime</button>
+            <button class="category-btn" data-category="manga">📖 Manga</button>
+            <button class="category-btn" data-category="manhwa">🌟 Manhwa</button>
+            <button class="category-btn" data-category="novel">📚 Novel</button>
+            <button class="category-btn" data-category="movie">🎞️ Movie</button>
+        </div>
+
+        <!-- Anime Section -->
+        <div class="content-section active" data-section="anime">
+            <div class="anime-grid">
+            <!-- One Piece -->
+            <div class="anime-card featured">
+                <div class="anime-image">🎩</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">One Piece</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Action</span>
+                        <span class="genre-tag">Adventure</span>
+                        <span class="genre-tag">Comedy</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>9.0/10</span>
+                    </div>
+                    <p class="anime-description">Follow Luffy's journey to become the King of Pirates with his crew in this epic adventure.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+
+            <!-- Naruto -->
+            <div class="anime-card">
+                <div class="anime-image">⚡</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">Naruto</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Action</span>
+                        <span class="genre-tag">Shounen</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span>8.8/10</span>
+                    </div>
+                    <p class="anime-description">Experience the ninja tale of Naruto and his journey to become Hokage.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+
+            <!-- Attack on Titan -->
+            <div class="anime-card">
+                <div class="anime-image">🧱</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">Attack on Titan</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Action</span>
+                        <span class="genre-tag">Dark</span>
+                        <span class="genre-tag">Drama</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>9.1/10</span>
+                    </div>
+                    <p class="anime-description">Fight against giant titans in a thrilling battle for humanity's survival.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+
+            <!-- My Hero Academia -->
+            <div class="anime-card">
+                <div class="anime-image">🦸</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">My Hero Academia</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Action</span>
+                        <span class="genre-tag">School</span>
+                        <span class="genre-tag">Superpowers</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span>8.7/10</span>
+                    </div>
+                    <p class="anime-description">Young heroes train to become the greatest at their hero academia.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+
+            <!-- Demon Slayer -->
+            <div class="anime-card">
+                <div class="anime-image">⚔️</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">Demon Slayer</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Action</span>
+                        <span class="genre-tag">Supernatural</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>8.9/10</span>
+                    </div>
+                    <p class="anime-description">Tanjiro fights to save his sister from a demonic curse with stunning action.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+
+            <!-- Death Note -->
+            <div class="anime-card">
+                <div class="anime-image">📓</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">Death Note</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Thriller</span>
+                        <span class="genre-tag">Psychological</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>9.0/10</span>
+                    </div>
+                    <p class="anime-description">A thrilling mind game between a genius and a supernatural notebook.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+
+            <!-- Steins;Gate -->
+            <div class="anime-card">
+                <div class="anime-image">⏰</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">Steins;Gate</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Sci-Fi</span>
+                        <span class="genre-tag">Thriller</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>9.0/10</span>
+                    </div>
+                    <p class="anime-description">Travel through time and prevent a catastrophe that could change reality.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+
+            <!-- Cowboy Bebop -->
+            <div class="anime-card">
+                <div class="anime-image">🚀</div>
+                <div class="anime-content">
+                    <h3 class="anime-title">Cowboy Bebop</h3>
+                    <div class="anime-genre">
+                        <span class="genre-tag">Sci-Fi</span>
+                        <span class="genre-tag">Noir</span>
+                        <span class="genre-tag">Adventure</span>
+                    </div>
+                    <div class="anime-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>8.8/10</span>
+                    </div>
+                    <p class="anime-description">Follow bounty hunters in space on their legendary adventures.</p>
+                    <button class="anime-btn">Watch Now</button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Manga Section -->
+        <div class="content-section" data-section="manga">
+            <div class="anime-grid">
+                <!-- Berserk Manga -->
+                <div class="anime-card featured">
+                    <div class="anime-image">⚔️</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Berserk</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Action</span>
+                            <span class="genre-tag">Dark Fantasy</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.5/10</span>
+                        </div>
+                        <p class="anime-description">An epic dark fantasy manga following a swordsman in his pursuit of revenge.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- Jojo's Bizarre Adventure Manga -->
+                <div class="anime-card">
+                    <div class="anime-image">👊</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">JoJo's Bizarre Adventure</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Action</span>
+                            <span class="genre-tag">Adventure</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>8.9/10</span>
+                        </div>
+                        <p class="anime-description">Multiple generations of the Joestar family face supernatural threats across time.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- Vinland Saga Manga -->
+                <div class="anime-card">
+                    <div class="anime-image">⛵</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Vinland Saga</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Historical</span>
+                            <span class="genre-tag">Adventure</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.2/10</span>
+                        </div>
+                        <p class="anime-description">A Viking warrior seeks redemption on the shores of Vinland.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- Fullmetal Alchemist Manga -->
+                <div class="anime-card">
+                    <div class="anime-image">🔬</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Fullmetal Alchemist</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Action</span>
+                            <span class="genre-tag">Science Fiction</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.1/10</span>
+                        </div>
+                        <p class="anime-description">Two brothers seek the Philosopher's Stone to restore their bodies through alchemy.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manhwa Section -->
+        <div class="content-section" data-section="manhwa">
+            <div class="anime-grid">
+                <!-- Tower of God Manhwa -->
+                <div class="anime-card featured">
+                    <div class="anime-image">🌀</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Tower of God</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Action</span>
+                            <span class="genre-tag">Adventure</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.3/10</span>
+                        </div>
+                        <p class="anime-description">A mysterious tower where climbers must survive deadly challenges to reach the top.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- Solo Leveling Manhwa -->
+                <div class="anime-card featured">
+                    <div class="anime-image">✨</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Solo Leveling</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Action</span>
+                            <span class="genre-tag">Fantasy</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.4/10</span>
+                        </div>
+                        <p class="anime-description">A weak hunter discovers a system to grow stronger and climb ranks in the hunter hierarchy.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- The Beginning After The End Manhwa -->
+                <div class="anime-card">
+                    <div class="anime-image">👑</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">The Beginning After The End</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Fantasy</span>
+                            <span class="genre-tag">Reincarnation</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>8.7/10</span>
+                        </div>
+                        <p class="anime-description">A king reincarnated in a world of magic seeks to change his fate.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- Omniscient Reader's Viewpoint Manhwa -->
+                <div class="anime-card">
+                    <div class="anime-image">📖</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Omniscient Reader's Viewpoint</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Fantasy</span>
+                            <span class="genre-tag">Mystery</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.0/10</span>
+                        </div>
+                        <p class="anime-description">A reader finds himself inside the novel he's been reading with unique knowledge of the story.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Novel Section -->
+        <div class="content-section" data-section="novel">
+            <div class="anime-grid">
+                <!-- Mistborn Novel -->
+                <div class="anime-card featured">
+                    <div class="anime-image">⏰</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Mistborn</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Fantasy</span>
+                            <span class="genre-tag">Adventure</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.0/10</span>
+                        </div>
+                        <p class="anime-description">A street orphan discovers she has powerful magical abilities in a world of ash.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- The Name of the Wind Novel -->
+                <div class="anime-card">
+                    <div class="anime-image">🌬️</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">The Name of the Wind</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Fantasy</span>
+                            <span class="genre-tag">Mystery</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>8.8/10</span>
+                        </div>
+                        <p class="anime-description">A legendary figure tells the true story of his early years and rise to fame.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- The Way of Kings Novel -->
+                <div class="anime-card">
+                    <div class="anime-image">🗡️</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">The Way of Kings</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Fantasy</span>
+                            <span class="genre-tag">Epic</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.2/10</span>
+                        </div>
+                        <p class="anime-description">An epic fantasy with multiple perspectives in a world of storms and ancient powers.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+
+                <!-- Percy Jackson Novel -->
+                <div class="anime-card">
+                    <div class="anime-image">⚡</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Percy Jackson Series</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Fantasy</span>
+                            <span class="genre-tag">Adventure</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>8.5/10</span>
+                        </div>
+                        <p class="anime-description">A boy discovers he's the son of a Greek god and must save the world.</p>
+                        <button class="anime-btn">Read Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie Section -->
+        <div class="content-section" data-section="movie">
+            <div class="anime-grid">
+                <!-- Your Name Movie -->
+                <div class="anime-card featured">
+                    <div class="anime-image">🌸</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Your Name</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Romance</span>
+                            <span class="genre-tag">Fantasy</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.3/10</span>
+                        </div>
+                        <p class="anime-description">Two teenagers mysteriously swap bodies across time in this beautiful tale.</p>
+                        <button class="anime-btn">Watch Now</button>
+                    </div>
+                </div>
+
+                <!-- A Silent Voice Movie -->
+                <div class="anime-card featured">
+                    <div class="anime-image">🤝</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">A Silent Voice</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Drama</span>
+                            <span class="genre-tag">Romance</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>9.1/10</span>
+                        </div>
+                        <p class="anime-description">A story of redemption as a boy seeks to make amends with the deaf girl he bullied.</p>
+                        <button class="anime-btn">Watch Now</button>
+                    </div>
+                </div>
+
+                <!-- Demon Slayer Movie -->
+                <div class="anime-card">
+                    <div class="anime-image">🔥</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Demon Slayer: Mugen Train</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Action</span>
+                            <span class="genre-tag">Supernatural</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>8.9/10</span>
+                        </div>
+                        <p class="anime-description">Tanjiro faces powerful demons on a mysterious train filled with illusions.</p>
+                        <button class="anime-btn">Watch Now</button>
+                    </div>
+                </div>
+
+                <!-- Weathering with You Movie -->
+                <div class="anime-card">
+                    <div class="anime-image">⛅</div>
+                    <div class="anime-content">
+                        <h3 class="anime-title">Weathering with You</h3>
+                        <div class="anime-genre">
+                            <span class="genre-tag">Romance</span>
+                            <span class="genre-tag">Fantasy</span>
+                        </div>
+                        <div class="anime-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>8.7/10</span>
+                        </div>
+                        <p class="anime-description">A boy meets a girl who can control the weather in this visually stunning film.</p>
+                        <button class="anime-btn">Watch Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p> <a href="index.html">LAFFI_01</a> </p>
+            <p style="margin-top: 15px; font-size: 12px;"></p>
+        </div>
+    </div>
+
+    <script>
+        // Category tab switching
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                
+                // Update active button
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update active section
+                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                document.querySelector(`[data-section="${category}"]`).classList.add('active');
+            });
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Add watch button interactions
+        document.querySelectorAll('.anime-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const title = this.parentElement.querySelector('.anime-title').textContent;
+                const buttonText = this.textContent;
+                alert(`🎬 Great choice! Check official streaming platforms to ${buttonText.toLowerCase()} "${title}"`);
+            });
+        });
+
+        // --- MINI MUSIC PLAYER ---
+        // Variables to sync with index.html
+        let miniPlaylist = [];
+        let miniCurrentTrackIndex = 0;
+        let miniIsPlaying = false;
+        const miniAudio = document.getElementById('miniMusicAudio');
+        const miniAudioSource = document.getElementById('miniAudioSource');
+
+        // Sync volume from sessionStorage (from index.html)
+        function syncVolumeFromSessionStorage() {
+            const savedVolume = sessionStorage.getItem('currentVolume');
+            const miniVolumeSlider = document.getElementById('miniVolumeSlider');
+            
+            if (savedVolume !== null) {
+                const volume = parseInt(savedVolume) / 100;
+                if (miniAudio) {
+                    miniAudio.volume = volume;
+                }
+                if (miniVolumeSlider) {
+                    miniVolumeSlider.value = savedVolume;
+                }
+            }
+        }
+
+        // Save mini playback state with timestamp
+        function saveMiniPlaybackState() {
+            const state = {
+                trackIndex: miniCurrentTrackIndex,
+                currentTime: (miniAudio && !isNaN(miniAudio.currentTime)) ? miniAudio.currentTime : 0,
+                isPlaying: miniIsPlaying,
+                volume: (miniAudio && miniAudio.volume !== undefined) ? Math.round(miniAudio.volume * 100) : 100,
+                timestamp: Date.now()
+            };
+            sessionStorage.setItem('musicPlaybackState', JSON.stringify(state));
+        }
+
+        // Periodically check for volume changes from index.html
+        function setupVolumeSync() {
+            let lastVolume = sessionStorage.getItem('currentVolume');
+            setInterval(() => {
+                const currentStoredVolume = sessionStorage.getItem('currentVolume');
+                if (currentStoredVolume !== lastVolume) {
+                    syncVolumeFromSessionStorage();
+                    lastVolume = currentStoredVolume;
+                }
+            }, 300);
+        }
+
+        // Setup auto-save for playback state while playing
+        let lastAutoSaveTime = 0;
+        function setupMiniAutoSave() {
+            if (miniAudio) {
+                miniAudio.addEventListener('timeupdate', () => {
+                    if (miniIsPlaying) {
+                        const now = Date.now();
+                        // Only save every 1 second to avoid excessive sessionStorage writes
+                        if (now - lastAutoSaveTime > 1000) {
+                            saveMiniPlaybackState();
+                            lastAutoSaveTime = now;
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize mini music player
+        async function initMiniMusicPlayer() {
+            // Load playlist from sessionStorage or fetch
+            await loadMiniPlaylist();
+            
+            // Restore state after playlist is loaded
+            restoreMiniPlaybackState();
+            
+            // Sync volume from index.html
+            syncVolumeFromSessionStorage();
+            
+            // Setup controls
+            const miniPlayBtn = document.getElementById('miniPlayBtn');
+            const miniPrevBtn = document.getElementById('miniPrevBtn');
+            const miniNextBtn = document.getElementById('miniNextBtn');
+            const closeMiniBtn = document.getElementById('closeMiniPlayer');
+            const backToPlayerBtn = document.getElementById('miniBackToPlayer');
+
+            if (miniPlayBtn) miniPlayBtn.addEventListener('click', miniTogglePlay);
+            if (miniPrevBtn) miniPrevBtn.addEventListener('click', miniPreviousTrack);
+            if (miniNextBtn) miniNextBtn.addEventListener('click', miniNextTrack);
+            if (closeMiniBtn) closeMiniBtn.addEventListener('click', () => {
+                document.getElementById('miniMusicPlayer').style.display = 'none';
+            });
+            if (backToPlayerBtn) backToPlayerBtn.addEventListener('click', () => {
+                // Save current playback state before navigating
+                saveMiniPlaybackState();
+                // Navigate back to index.html - music will continue from saved state
+                window.location.href = 'index.html';
+            });
+
+            // Volume control
+            const miniVolumeSlider = document.getElementById('miniVolumeSlider');
+            if (miniVolumeSlider) {
+                miniVolumeSlider.addEventListener('input', (e) => {
+                    const volumeValue = parseInt(e.target.value);
+                    const volume = volumeValue / 100;
+                    if (miniAudio) {
+                        miniAudio.volume = volume;
+                    }
+                    // Save to sessionStorage so it syncs with index.html
+                    // Ensure we save it as a string integer (0-100)
+                    sessionStorage.setItem('currentVolume', String(volumeValue));
+                });
+            }
+
+            // Audio event listeners
+            if (miniAudio) {
+                miniAudio.addEventListener('ended', miniNextTrack);
+                miniAudio.addEventListener('error', () => {
+                    console.warn('Audio playback error');
+                    console.warn('Error code:', miniAudio.error?.code);
+                    if (miniPlaylist.length > 0) {
+                        console.warn('Current track URL:', miniPlaylist[miniCurrentTrackIndex]?.url);
+                    }
+                    miniIsPlaying = false;
+                    updateMiniPlayer();
+                });
+            }
+
+            // Setup auto-save for continuous state updates
+            setupMiniAutoSave();
+
+            // Update player immediately and every 200ms for smooth experience
+            updateMiniPlayer();
+            setInterval(updateMiniPlayer, 200);
+            
+            // Setup volume sync from index.html
+            setupVolumeSync();
+        }
+
+        async function loadMiniPlaylist() {
+            // First, try to get playlist from sessionStorage (if already loaded from index.html)
+            const savedPlaylist = sessionStorage.getItem('playlistData');
+            if (savedPlaylist) {
+                try {
+                    miniPlaylist = JSON.parse(savedPlaylist);
+                    console.log('Loaded playlist from sessionStorage:', miniPlaylist.length, 'tracks');
+                    return true;
+                } catch (error) {
+                    console.warn('Could not parse saved playlist:', error);
+                }
+            }
+            
+            // If not in sessionStorage, fetch it from file
+            try {
+                const response = await fetch('music/playlist.json');
+                if (response.ok) {
+                    miniPlaylist = await response.json();
+                    console.log('Loaded playlist from file:', miniPlaylist.length, 'tracks');
+                    // Store it in sessionStorage for future use
+                    sessionStorage.setItem('playlistData', JSON.stringify(miniPlaylist));
+                    return true;
+                } else {
+                    console.warn('Failed to fetch playlist:', response.status);
+                }
+            } catch (error) {
+                console.warn('Could not load playlist:', error);
+            }
+            
+            console.warn('Playlist is empty or failed to load');
+            return false;
+        }
+
+        function restoreMiniPlaybackState() {
+            const saved = sessionStorage.getItem('musicPlaybackState');
+            if (saved && miniPlaylist.length > 0) {
+                try {
+                    const state = JSON.parse(saved);
+                    miniCurrentTrackIndex = Math.min(state.trackIndex || 0, miniPlaylist.length - 1);
+                    miniIsPlaying = state.isPlaying || false;
+                    
+                    // Calculate elapsed time since last save
+                    const elapsedTime = (Date.now() - (state.timestamp || Date.now())) / 1000;
+                    const newCurrentTime = (state.currentTime || 0) + elapsedTime;
+                    
+                    loadTrackToAudio();
+                    
+                    // Wait for audio to load, then seek and play
+                    if (miniAudio) {
+                        miniAudio.addEventListener('canplay', function onCanPlay() {
+                            miniAudio.removeEventListener('canplay', onCanPlay);
+                            const trackDuration = miniAudio.duration || miniPlaylist[miniCurrentTrackIndex]?.duration || 0;
+                            miniAudio.currentTime = Math.min(newCurrentTime, trackDuration - 1);
+                            
+                            if (miniIsPlaying) {
+                                miniAudio.play().catch(err => {
+                                    console.warn('Could not auto-play audio:', err);
+                                    miniIsPlaying = false;
+                                });
+                            }
+                        }, { once: true });
+                        
+                        // Timeout in case canplay doesn't fire
+                        setTimeout(() => {
+                            const trackDuration = miniAudio.duration || miniPlaylist[miniCurrentTrackIndex]?.duration || 0;
+                            if (miniAudio.currentTime === 0) {
+                                miniAudio.currentTime = Math.min(newCurrentTime, trackDuration - 1);
+                            }
+                            if (miniIsPlaying && miniAudio.paused) {
+                                miniAudio.play().catch(err => {
+                                    console.warn('Could not auto-play audio:', err);
+                                });
+                            }
+                        }, 500);
+                    }
+                } catch (error) {
+                    console.error('Error restoring state:', error);
+                    miniCurrentTrackIndex = 0;
+                    loadTrackToAudio();
+                }
+            } else if (miniPlaylist.length === 0) {
+                miniCurrentTrackIndex = 0;
+            }
+            updateMiniPlayer();
+        }
+
+        function loadTrackToAudio() {
+            if (miniPlaylist.length === 0 || !miniAudio || !miniAudioSource) {
+                console.warn('Cannot load track: playlist empty or audio elements missing', {
+                    playlistLength: miniPlaylist.length,
+                    miniAudio: !!miniAudio,
+                    miniAudioSource: !!miniAudioSource
+                });
+                return;
+            }
+            
+            const track = miniPlaylist[miniCurrentTrackIndex];
+            if (track && track.url) {
+                console.log('Loading track:', track.title, 'URL:', track.url);
+                miniAudioSource.src = track.url;
+                miniAudio.load();
+            } else {
+                console.warn('Track not found or missing URL:', track);
+            }
+        }
+
+        function updateMiniPlayer() {
+            if (miniPlaylist.length === 0) {
+                document.getElementById('miniTrackName').textContent = 'No music loaded';
+                document.getElementById('miniTrackArtist').textContent = 'Load playlist from main player';
+                return;
+            }
+
+            const track = miniPlaylist[miniCurrentTrackIndex];
+            const playBtn = document.getElementById('miniPlayBtn');
+            const trackName = document.getElementById('miniTrackName');
+            const trackArtist = document.getElementById('miniTrackArtist');
+
+            if (trackName) trackName.textContent = track.title || 'Unknown';
+            if (trackArtist) trackArtist.textContent = track.artist || 'Artist';
+            
+            // Check if audio is actually playing
+            const isAudioPlaying = miniAudio && !miniAudio.paused;
+            if (playBtn) playBtn.textContent = isAudioPlaying ? '⏸' : '▶';
+
+            // Check sessionStorage for real-time updates from main player
+            try {
+                const saved = sessionStorage.getItem('musicPlaybackState');
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    const newIndex = state.trackIndex || 0;
+                    if (newIndex !== miniCurrentTrackIndex) {
+                        miniCurrentTrackIndex = newIndex;
+                        loadTrackToAudio();
+                        const newTrack = miniPlaylist[miniCurrentTrackIndex];
+                        if (trackName) trackName.textContent = newTrack.title || 'Unknown';
+                        if (trackArtist) trackArtist.textContent = newTrack.artist || 'Artist';
+                    }
+                }
+            } catch (error) {
+                // Ignore parse errors
+            }
+        }
+
+        function miniTogglePlay() {
+            if (!miniAudio || miniPlaylist.length === 0) return;
+            
+            if (miniAudio.paused) {
+                // Play the audio - wait for canplay event if not ready
+                const playAudio = () => {
+                    miniAudio.play().catch(err => {
+                        console.warn('Could not play audio:', err);
+                        miniIsPlaying = false;
+                    });
+                    miniIsPlaying = true;
+                    miniAudio.removeEventListener('canplay', playAudio);
+                };
+                
+                if (miniAudio.readyState >= 2) {
+                    // Audio is ready, play immediately
+                    playAudio();
+                } else {
+                    // Wait for audio to be ready
+                    miniAudio.addEventListener('canplay', playAudio, { once: true });
+                    // Timeout fallback
+                    setTimeout(() => {
+                        if (miniAudio.paused && miniIsPlaying) {
+                            playAudio();
+                        }
+                    }, 1500);
+                }
+            } else {
+                // Pause the audio
+                miniAudio.pause();
+                miniIsPlaying = false;
+            }
+            
+            // Update sessionStorage so index.html knows
+            saveMiniPlaybackState();
+            updateMiniPlayer();
+        }
+
+        function miniNextTrack() {
+            if (miniPlaylist.length === 0) return;
+            
+            miniCurrentTrackIndex = (miniCurrentTrackIndex + 1) % miniPlaylist.length;
+            loadTrackToAudio();
+            
+            if (miniAudio) {
+                miniAudio.play().catch(err => {
+                    console.warn('Could not play audio:', err);
+                });
+                miniIsPlaying = true;
+            }
+            
+            saveMiniPlaybackState();
+            updateMiniPlayer();
+        }
+
+        function miniPreviousTrack() {
+            if (miniPlaylist.length === 0) return;
+            
+            miniCurrentTrackIndex = (miniCurrentTrackIndex - 1 + miniPlaylist.length) % miniPlaylist.length;
+            loadTrackToAudio();
+            
+            if (miniAudio) {
+                miniAudio.play().catch(err => {
+                    console.warn('Could not play audio:', err);
+                });
+                miniIsPlaying = true;
+            }
+            
+            saveMiniPlaybackState();
+            updateMiniPlayer();
+        }
+
+        // Save state when navigating away via back link
+        document.addEventListener('DOMContentLoaded', () => {
+            const backLink = document.querySelector('.nav-back');
+            if (backLink) {
+                backLink.addEventListener('click', () => {
+                    saveMiniPlaybackState();
+                });
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initMiniMusicPlayer);
+
+        // Save playback state before leaving the page
+        window.addEventListener('beforeunload', saveMiniPlaybackState);
+    </script>
+</body>
+</html>
