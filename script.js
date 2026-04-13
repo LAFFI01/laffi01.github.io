@@ -83,7 +83,7 @@ function initializeVolumeControl() {
         }
         updateVolumeSliderFill();
         saveVolumeToSessionStorage();
-        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("MAX VOLUME! LET'S GOOO! 🔊🔥", 2500, 'excited');
+        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🤫", 2000, 'cute');
     });
     
     // Max volume button
@@ -96,7 +96,7 @@ function initializeVolumeControl() {
         }
         updateVolumeSliderFill();
         saveVolumeToSessionStorage();
-        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🤫", 2000, 'cute');
+        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("MAX VOLUME! LET'S GOOO! 🔊🔥", 2500, 'excited');
     });
     
     // Update slider fill color
@@ -1069,6 +1069,9 @@ function dragElement(elmnt, header) {
     }
 
     function dragMouseDown(e) {
+        if (e.target.closest('.title-right') || e.target.classList.contains('sp-header-icon') || e.target.closest('.speech-bubble-close')) {
+            return;
+        }
         e = e || window.event;
         e.preventDefault();
         isDragging = true;
@@ -1098,6 +1101,9 @@ function dragElement(elmnt, header) {
     }
 
     function dragTouchStart(e) {
+        if (e.target.closest('.title-right') || e.target.classList.contains('sp-header-icon') || e.target.closest('.speech-bubble-close')) {
+            return;
+        }
         e = e || window.event;
         if (e.cancelable) e.preventDefault();
         isDragging = true;
