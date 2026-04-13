@@ -362,7 +362,12 @@ body, html {
     left: auto !important;
     width: 320px !important;
     height: auto !important;
-    background: #121212 !important;
+    background: rgba(18, 18, 22, 0.65) !important;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     touch-action: none;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -372,12 +377,12 @@ body, html {
 
 /* Spotify Music Player Styles */
 .sp-top-bar {
-    background: linear-gradient(to bottom, #262626, #1a1a1a);
+    background: rgba(0, 0, 0, 0.2);
     padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #404040;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     cursor: move;
     user-select: none;
     -webkit-user-select: none;
@@ -412,7 +417,7 @@ body, html {
 
 /* Spotify Content */
 .sp-content {
-    background: linear-gradient(180deg, #282828 0%, #1a1a1a 100%) !important;
+    background: transparent !important;
     padding: 20px !important;
     display: flex;
     flex-direction: column;
@@ -421,7 +426,7 @@ body, html {
 
 /* Playlist View */
 .sp-playlist {
-    background: linear-gradient(180deg, #282828 0%, #1a1a1a 100%) !important;
+    background: transparent !important;
     padding: 20px !important;
     display: flex !important;
     flex-direction: column;
@@ -435,7 +440,7 @@ body, html {
     justify-content: space-between;
     align-items: center;
     padding-bottom: 12px;
-    border-bottom: 1px solid #404040;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sp-playlist-header h3 {
@@ -458,20 +463,21 @@ body, html {
 
 .sp-playlist-item {
     padding: 10px 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
-    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
 }
 
 .sp-playlist-item:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(4px);
 }
 
 .sp-playlist-item.active {
-    background: rgba(29, 185, 84, 0.2);
-    border-left-color: #1db954;
+    background: rgba(29, 185, 84, 0.15);
+    border: 1px solid rgba(29, 185, 84, 0.3);
 }
 
 .sp-playlist-item-title {
@@ -502,7 +508,13 @@ body, html {
     height: 160px;
     border-radius: 8px;
     object-fit: cover;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(29, 185, 84, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.sp-album-art:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(29, 185, 84, 0.2);
 }
 
 /* Info Row */
@@ -557,7 +569,8 @@ body, html {
 
 .sp-progress-fill {
     height: 100%;
-    background: #1db954;
+    background: linear-gradient(90deg, #1db954, #8ae234);
+    box-shadow: 0 0 8px rgba(29, 185, 84, 0.5);
     border-radius: 3px;
     width: 0%;
     transition: width 0.1s linear;
@@ -605,6 +618,7 @@ body, html {
 
 .sp-control-icon:hover {
     opacity: 1;
+    transform: scale(1.1);
 }
 
 .sp-control-icon.sp-secondary {
@@ -614,7 +628,7 @@ body, html {
 .sp-play-circle {
     width: 56px;
     height: 56px;
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
     border-radius: 50%;
     display: flex;
     align-items: center;
