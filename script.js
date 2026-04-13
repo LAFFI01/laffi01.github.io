@@ -83,7 +83,7 @@ function initializeVolumeControl() {
         }
         updateVolumeSliderFill();
         saveVolumeToSessionStorage();
-        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("MAX VOLUME! LET'S GOOO! 🔊🔥", 2500, 'excited');
+        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🤫", 2000, 'cute');
     });
     
     // Max volume button
@@ -96,7 +96,7 @@ function initializeVolumeControl() {
         }
         updateVolumeSliderFill();
         saveVolumeToSessionStorage();
-        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🤫", 2000, 'cute');
+        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("MAX VOLUME! LET'S GOOO! 🔊🔥", 2500, 'excited');
     });
     
     // Update slider fill color
@@ -176,6 +176,11 @@ function initializeDisplaySettings() {
         displaySettings.darkMode = e.target.checked;
         applyDisplaySettings();
         saveDisplaySettings();
+        if (e.target.checked) {
+            showPixelFaceMessage("Easy on eyes 🌙", 2500, 'calm');
+        } else {
+            showPixelFaceMessage("Bright! ☀️", 2000, 'happy');
+        }
     });
     
     // Night light toggle
@@ -203,11 +208,7 @@ function initializeDisplaySettings() {
         nightLightToggle.checked = false;
         applyDisplaySettings();
         saveDisplaySettings();
-        if (e.target.checked) {
-            showPixelFaceMessage("Ah, dark mode! Easy on the eyes. 🌙", 2500, 'cool');
-        } else {
-            showPixelFaceMessage("Whoa, bright! Light mode activated! ☀️", 2500, 'surprised');
-        }
+        showPixelFaceMessage("Settings reset to default! 🔄", 2500, 'happy');
     });
 }
 
@@ -356,14 +357,13 @@ function copyEmailToClipboard() {
 }
 
 // --- 1. Live Clock Functionality ---
+const clockEl = document.getElementById('clock');
 function updateClock() {
+    if (!clockEl) return;
     const now = new Date();
     const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
     const timeString = now.toLocaleString('en-US', options).replace(',', '');
-    const clockEl = document.getElementById('clock');
-    if (clockEl) {
-        clockEl.textContent = timeString;
-    }
+    clockEl.textContent = timeString;
 }
 
 setInterval(updateClock, 1000);
@@ -423,12 +423,13 @@ function updateTerminalPrompt() {
     }
 }
 
+const terminalOutput = document.querySelector('#terminal-output');
+const terminalInput = document.querySelector('#terminal-input');
+
 function processTerminalCommand(command) {
-    const terminalOutput = document.querySelector('#terminal-output');
-    const terminalInput = document.querySelector('#terminal-input');
     const prompt = `<span class="prompt-user">${currentUser.username}</span><span class="terminal-colon">@</span>${currentUser.hostname}<span class="terminal-colon">:</span><span class="prompt-path">~/CODE/MY_ML</span><span class="terminal-dollar">$</span>`;
     
-    if (!terminalOutput) return;
+    if (!terminalOutput || !terminalInput) return;
     
     // Display user command
     let output = terminalOutput.innerHTML;
@@ -1082,6 +1083,9 @@ function dragElement(elmnt, header) {
     }
 
     function dragMouseDown(e) {
+        if (e.target.closest('.title-right') || e.target.classList.contains('sp-header-icon') || e.target.closest('.speech-bubble-close')) {
+            return;
+        }
         e = e || window.event;
         e.preventDefault();
         isDragging = true;
@@ -1098,6 +1102,9 @@ function dragElement(elmnt, header) {
     }
 
     function dragTouchStart(e) {
+        if (e.target.closest('.title-right') || e.target.classList.contains('sp-header-icon') || e.target.closest('.speech-bubble-close')) {
+            return;
+        }
         e = e || window.event;
         isDragging = true;
         pos3 = e.touches[0].clientX;
@@ -3195,10 +3202,8 @@ document.addEventListener('DOMContentLoaded', function() {
         nTerminalApp.addEventListener('click', () => {
             if (terminalWindow) {
                 terminalWindow.style.display = 'flex';
-                terminalWindow.style.width = '100vw';
-                terminalWindow.style.height = '100vh';
-                terminalWindow.style.top = '0';
-                terminalWindow.style.left = '0';
+                terminalWindow.style.top = '60px';
+                terminalWindow.style.left = '15px';
                 terminalWindow.style.zIndex = '9999';
                 enableTerminalInput();
             }
@@ -3209,10 +3214,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const openMobileMusicPlayer = () => {
         if (musicPlayerWindow) {
             musicPlayerWindow.style.display = 'flex';
-            musicPlayerWindow.style.width = '100vw';
-            musicPlayerWindow.style.height = '100vh';
-            musicPlayerWindow.style.top = '0';
-            musicPlayerWindow.style.left = '0';
             musicPlayerWindow.style.zIndex = '9999';
         }
     };
@@ -3321,26 +3322,20 @@ function initializeDockTooltips() {
 // --- NOTHING OS MOBILE LOGIC ---
 
 // 1. Mobile Clock Updates
+const nTime = document.getElementById('n-time');
+const secondHand = document.getElementById('sec-hand');
+const minuteHand = document.getElementById('min-hand');
+const hourHand = document.getElementById('hour-hand');
+
 function updateMobileClock() {
     const now = new Date();
     const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     
-    const nTime = document.getElementById('n-time');
     if (nTime) nTime.textContent = timeString;
     
-    // Update analog clock hands
-    updateAnalogClock(now);
-}
-
-// Analog Clock Animation (Fixed transform to center hands properly)
-function updateAnalogClock(date) {
-    const seconds = date.getSeconds();
-    const minutes = date.getMinutes();
-    const hours = date.getHours();
-    
-    const secondHand = document.getElementById('sec-hand');
-    const minuteHand = document.getElementById('min-hand');
-    const hourHand = document.getElementById('hour-hand');
+    const seconds = now.getSeconds();
+    const minutes = now.getMinutes();
+    const hours = now.getHours();
     
     if (secondHand) {
         const secondDegrees = (seconds / 60) * 360;
