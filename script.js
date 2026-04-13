@@ -1181,28 +1181,29 @@ let terminalOriginalState = {
 };
 
 function closeTerminal() {
-    if (terminalWindow) {
-        terminalWindow.style.display = 'none';
+    const terminal = document.getElementById('terminal-window');
+    if (terminal) {
+        terminal.style.display = 'none';
         
         // Reset to default size and position when closing
-        terminalWindow.style.width = '700px';
-        terminalWindow.style.height = '450px';
-        terminalWindow.style.top = '50px';
-        terminalWindow.style.left = '50px';
-        terminalWindow.style.zIndex = '10';
+        terminal.style.width = '700px';
+        terminal.style.height = '450px';
+        terminal.style.top = '50px';
+        terminal.style.left = '50px';
+        terminal.style.zIndex = '10';
         
         // Reset minimized/maximized states
         isTerminalMinimized = false;
         isTerminalMaximized = false;
         
         // Show window content
-        const windowContent = terminalWindow.querySelector('.window-content');
+        const windowContent = terminal.querySelector('.window-content');
         if (windowContent) {
             windowContent.style.display = 'block';
         }
         
         // Reset title bar border radius
-        const titleBar = terminalWindow.querySelector('.title-bar');
+        const titleBar = terminal.querySelector('.title-bar');
         if (titleBar) {
             titleBar.style.borderRadius = '8px 8px 0 0';
         }
@@ -1210,10 +1211,11 @@ function closeTerminal() {
 }
 
 function minimizeTerminal() {
-    if (!terminalWindow) return;
+    const terminal = document.getElementById('terminal-window');
+    if (!terminal) return;
     
-    const titleBar = terminalWindow.querySelector('.title-bar');
-    const windowContent = terminalWindow.querySelector('.window-content');
+    const titleBar = terminal.querySelector('.title-bar');
+    const windowContent = terminal.querySelector('.window-content');
     
     if (!windowContent) {
         console.warn('Window content not found');
@@ -1227,7 +1229,7 @@ function minimizeTerminal() {
         if (titleBar) {
             titleBar.style.borderRadius = '8px 8px 0 0';
         }
-        terminalWindow.style.height = terminalOriginalState.height;
+        terminal.style.height = terminalOriginalState.height;
     } else {
         // Minimize
         windowContent.style.display = 'none';
@@ -1235,59 +1237,61 @@ function minimizeTerminal() {
         if (titleBar) {
             titleBar.style.borderRadius = '8px';
         }
-        terminalWindow.style.height = 'auto';
+        terminal.style.height = 'auto';
     }
 }
 
 function maximizeTerminal() {
-    if (!terminalWindow) return;
+    const terminal = document.getElementById('terminal-window');
+    if (!terminal) return;
     
     if (isTerminalMaximized) {
         // Restore to saved size
-        terminalWindow.style.width = terminalOriginalState.width;
-        terminalWindow.style.height = terminalOriginalState.height;
-        terminalWindow.style.top = terminalOriginalState.top;
-        terminalWindow.style.left = terminalOriginalState.left;
-        terminalWindow.style.zIndex = terminalOriginalState.zIndex;
+        terminal.style.width = terminalOriginalState.width;
+        terminal.style.height = terminalOriginalState.height;
+        terminal.style.top = terminalOriginalState.top;
+        terminal.style.left = terminalOriginalState.left;
+        terminal.style.zIndex = terminalOriginalState.zIndex;
         isTerminalMaximized = false;
     } else {
         // Save current state before maximizing
         if (!isTerminalMaximized) {
             terminalOriginalState = {
-                width: terminalWindow.style.width || '700px',
-                height: terminalWindow.style.height || '450px',
-                top: terminalWindow.style.top || '50px',
-                left: terminalWindow.style.left || '50px',
-                zIndex: terminalWindow.style.zIndex || '10'
+                width: terminal.style.width || '700px',
+                height: terminal.style.height || '450px',
+                top: terminal.style.top || '50px',
+                left: terminal.style.left || '50px',
+                zIndex: terminal.style.zIndex || '10'
             };
         }
         
         // Maximize to full screen
-        terminalWindow.style.width = 'calc(100vw - 40px)';
-        terminalWindow.style.height = 'calc(100vh - 80px)';
-        terminalWindow.style.top = '20px';
-        terminalWindow.style.left = '20px';
-        terminalWindow.style.zIndex = '9999';
+        terminal.style.width = 'calc(100vw - 40px)';
+        terminal.style.height = 'calc(100vh - 80px)';
+        terminal.style.top = '20px';
+        terminal.style.left = '20px';
+        terminal.style.zIndex = '9999';
         isTerminalMaximized = true;
     }
 }
 
 function closeMusic() {
-    if (musicPlayerWindow) {
-        musicPlayerWindow.style.display = 'none';
+    const music = document.getElementById('music-player');
+    if (music) {
+        music.style.display = 'none';
         
         // Reset to default size and position when closing
-        musicPlayerWindow.style.width = '320px';
-        musicPlayerWindow.style.height = 'auto';
-        musicPlayerWindow.style.bottom = '70px';
-        musicPlayerWindow.style.right = '40px';
-        musicPlayerWindow.style.top = 'auto';
-        musicPlayerWindow.style.left = 'auto';
-        musicPlayerWindow.style.zIndex = '10';
+        music.style.width = '320px';
+        music.style.height = 'auto';
+        music.style.bottom = '70px';
+        music.style.right = '40px';
+        music.style.top = 'auto';
+        music.style.left = 'auto';
+        music.style.zIndex = '10';
         
         // Hide playlist view and show now playing
-        const playlistView = musicPlayerWindow.querySelector('.sp-playlist');
-        const nowPlayingView = musicPlayerWindow.querySelector('#sp-now-playing');
+        const playlistView = music.querySelector('.sp-playlist');
+        const nowPlayingView = music.querySelector('#sp-now-playing');
         if (playlistView) playlistView.style.display = 'none';
         if (nowPlayingView) nowPlayingView.style.display = 'block';
     }
