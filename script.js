@@ -3350,6 +3350,87 @@ function initializeDockTooltips() {
     });
 }
 
+// --- MATRIX RAIN EFFECT ---
+let matrixInterval = null;
+let matrixTiltHandler = null;
+function toggleMatrix() {
+    const canvas = document.getElementById('matrix-canvas');
+    if (!canvas) return;
+
+    if (matrixInterval) {
+        clearInterval(matrixInterval);
+        matrixInterval = null;
+        canvas.style.display = 'none';
+        canvas.style.transform = ''; // Reset 3D transform
+        showPixelFaceMessage("Matrix mode disabled! 🔙", 2000, 'normal');
+        
+        if (matrixTiltHandler) {
+            document.removeEventListener('mousemove', matrixTiltHandler);
+            matrixTiltHandler = null;
+        }
+
+        // Revert face mode if it was hacker
+        const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+        faces.forEach(face => {
+            face.classList.remove('mode-hacker');
+        });
+        return;
+    }
+
+    canvas.style.display = 'block';
+    const ctx = canvas.getContext('2d');
+    let rainDrops = [];
+
+    const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const columns = Math.floor(canvas.width / 16);
+        for (let i = rainDrops.length; i < columns; i++) rainDrops[i] = 1;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン';
+    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const nums = '0123456789';
+    const alphabet = katakana + latin + nums;
+
+    const draw = () => {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0F0'; // Hacker Green
+        ctx.font = '16px monospace';
+
+        for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * 16, rainDrops[i] * 16);
+            if (rainDrops[i] * 16 > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+            rainDrops[i]++;
+        }
+    };
+
+    matrixInterval = setInterval(draw, 30);
+    
+    // Add 3D Interactive Tilt
+    canvas.style.transform = 'scale(1.15) perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    matrixTiltHandler = (e) => {
+        // Calculate tilt relative to the center of the viewport
+        const xAxis = (window.innerWidth / 2 - e.clientX) / 30; // Max tilt ~15-20 degrees
+        const yAxis = (window.innerHeight / 2 - e.clientY) / 30;
+        
+        canvas.style.transform = `scale(1.15) perspective(1000px) rotateX(${yAxis}deg) rotateY(${-xAxis}deg)`;
+    };
+    document.addEventListener('mousemove', matrixTiltHandler);
+
+    // Enter Hacker mode and show message
+    showPixelFaceMessage("Wake up, Neo... 🕶️💻", 3500, 'cool');
+    const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+    faces.forEach(face => {
+        ['standard', 'party', 'focus'].forEach(m => face.classList.remove(`mode-${m}`));
+        face.classList.add('mode-hacker');
+    });
+}
+
 // --- NOTHING OS MOBILE LOGIC ---
 
 // 1. Mobile Clock Updates

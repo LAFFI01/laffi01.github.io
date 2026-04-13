@@ -2320,6 +2320,20 @@ body.reader-mode .sp-content {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
+/* Matrix Canvas Overlay */
+.matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    display: none;
+    transition: transform 0.1s ease-out;
+    transform-origin: center center;
+}
+
 /* --- PIXEL FACE MODES --- */
 .pixel-face-widget.mode-party, .n-pixel-face.mode-party {
     animation: partyBounce 0.5s ease-in-out infinite, rainbowHue 3s linear infinite !important;
