@@ -1234,7 +1234,37 @@ let terminalOriginalState = {
 
 function closeTerminal() {
     if (terminalWindow) {
+        // Hide the terminal
         terminalWindow.style.display = 'none';
+        
+        // Reset mobile fullscreen styles
+        terminalWindow.style.width = '';
+        terminalWindow.style.height = '';
+        terminalWindow.style.top = '';
+        terminalWindow.style.left = '';
+        terminalWindow.style.zIndex = '';
+        
+        // Reset any minimize/maximize states
+        isTerminalMinimized = false;
+        isTerminalMaximized = false;
+        
+        // Reset terminal content display
+        const windowContent = terminalWindow.querySelector('.window-content');
+        if (windowContent) {
+            windowContent.style.display = 'block';
+        }
+        
+        // Reset title bar border radius
+        const titleBar = terminalWindow.querySelector('.title-bar');
+        if (titleBar) {
+            titleBar.style.borderRadius = '8px 8px 0 0';
+        }
+        
+        // Restore original dimensions
+        terminalWindow.style.height = terminalOriginalState.height || '450px';
+        terminalWindow.style.width = terminalOriginalState.width || '700px';
+        terminalWindow.style.top = terminalOriginalState.top || '100px';
+        terminalWindow.style.left = terminalOriginalState.left || '50px';
     }
 }
 
@@ -1303,7 +1333,17 @@ function maximizeTerminal() {
 
 function closeMusic() {
     if (musicPlayerWindow) {
+        // Hide the music player
         musicPlayerWindow.style.display = 'none';
+        
+        // Reset mobile fullscreen styles
+        musicPlayerWindow.style.width = '';
+        musicPlayerWindow.style.height = '';
+        musicPlayerWindow.style.top = '';
+        musicPlayerWindow.style.left = '';
+        musicPlayerWindow.style.bottom = '';
+        musicPlayerWindow.style.right = '';
+        musicPlayerWindow.style.zIndex = '';
     }
 }
 
