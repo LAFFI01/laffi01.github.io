@@ -87,7 +87,7 @@ body, html {
     cursor: grab;
     user-select: none;
     transition: border-color 0.2s, background 0.2s, filter 0.2s;
-    z-index: 5;
+    z-index: 100;
 }
 
 .pixel-face-widget:active {
@@ -361,13 +361,13 @@ body, html {
     right: 40px !important;
     top: auto !important;
     left: auto !important;
-    width: 320px !important;
+    width: 260px !important;
     height: auto !important;
     background: rgba(18, 18, 22, 0.65) !important;
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 20px !important;
+    border-radius: 16px !important;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     touch-action: none;
     backface-visibility: hidden;
@@ -420,20 +420,20 @@ body, html {
 /* Spotify Content */
 .sp-content {
     background: transparent !important;
-    padding: 20px !important;
+    padding: 16px !important;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
 /* Playlist View */
 .sp-playlist {
     background: transparent !important;
-    padding: 20px !important;
+    padding: 16px !important;
     display: flex !important;
     flex-direction: column;
     gap: 12px;
-    max-height: 400px;
+    max-height: 280px;
     overflow-y: auto;
 }
 
@@ -447,7 +447,7 @@ body, html {
 
 .sp-playlist-header h3 {
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     margin: 0;
 }
@@ -484,14 +484,14 @@ body, html {
 
 .sp-playlist-item-title {
     color: #fff;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .sp-playlist-item-artist {
     color: #b3b3b3;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .sp-playlist-item-duration {
@@ -507,10 +507,13 @@ body, html {
 /* Album Art */
 .sp-album-art {
     width: 100%;
-    height: 160px;
-    border-radius: 8px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-width: 220px;
+    margin: 0 auto 4px auto;
+    border-radius: 12px;
     object-fit: cover;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(29, 185, 84, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(29, 185, 84, 0.15);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -523,8 +526,8 @@ body, html {
 .sp-info-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: center;
+    gap: 8px;
 }
 
 .sp-text {
@@ -532,19 +535,19 @@ body, html {
 }
 
 .sp-song-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .sp-artist {
-    font-size: 13px;
+    font-size: 12px;
     color: #b3b3b3;
 }
 
 .sp-like-btn {
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     opacity: 0.8;
     transition: opacity 0.2s;
@@ -566,7 +569,7 @@ body, html {
     border-radius: 3px;
     cursor: pointer;
     position: relative;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .sp-progress-fill {
@@ -607,12 +610,12 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 24px;
-    margin-top: 8px;
+    gap: 16px;
+    margin-top: 4px;
 }
 
 .sp-control-icon {
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     opacity: 0.6;
     transition: all 0.2s;
@@ -628,8 +631,8 @@ body, html {
 }
 
 .sp-play-circle {
-    width: 56px;
-    height: 56px;
+    width: 46px;
+    height: 46px;
     background: linear-gradient(135deg, var(--accent), var(--accent-hover));
     border-radius: 50%;
     display: flex;
@@ -1569,7 +1572,7 @@ body.reader-mode .sp-content {
     height: 100%;
     image-rendering: pixelated;
     position: relative;
-    z-index: 10;
+    z-index: 100;
 }
 
 .n-pixel-face svg {
@@ -2293,7 +2296,7 @@ body.reader-mode .sp-content {
     position: sticky;
     bottom: 0;
     background: linear-gradient(to top, rgba(10,10,10,0.95) 50%, rgba(10,10,10,0));
-    z-index: 2;
+    z-index: 10;
     margin-left: -20px;
     width: calc(100% + 40px);
 }
@@ -2320,7 +2323,7 @@ body.reader-mode .sp-content {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Matrix Canvas - True Background (no stacking conflicts) */
+/* Matrix Canvas Overlay */
 .matrix-canvas {
     position: fixed;
     top: 0;
@@ -2329,8 +2332,6 @@ body.reader-mode .sp-content {
     height: 100vh;
     pointer-events: none;
     display: none;
-    margin: 0;
-    padding: 0;
 }
 
 /* --- PIXEL FACE MODES --- */
