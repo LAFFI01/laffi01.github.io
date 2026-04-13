@@ -820,8 +820,8 @@ a.dock-icon {
 
     /* Make terminal smaller on mobile */
     #terminal-window {
-        max-height: 100vh !important;
-        top: 0 !important;
+        max-height: 300px !important;
+        top: 20px !important;
     }
 
     #terminal-window .window-content {
