@@ -1326,7 +1326,7 @@ body.reader-mode .sp-content {
 
 /* --- VIEW SWITCHING LOGIC --- */
 /* Default: Show Desktop, Hide Mobile */
-.desktop-ui { display: block; height: 100%; }
+.desktop-ui { display: block; height: 100%; position: relative; z-index: 1; }
 .mobile-ui { display: none; }
 
 /* Mobile View: Hide Desktop, Show Nothing OS */
@@ -2323,16 +2323,16 @@ body.reader-mode .sp-content {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Matrix Canvas - Background Layer */
+/* Matrix Canvas Overlay */
 .matrix-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    z-index: 0;
     pointer-events: none;
     display: none;
-    z-index: -9999;
 }
 
 /* --- PIXEL FACE MODES --- */
