@@ -1500,13 +1500,14 @@ body.reader-mode .sp-content {
     font-weight: 500;
     white-space: nowrap;
     text-align: center;
-    opacity: 0;
-    transform: translateY(-5px);
-    animation: labelFadeIn 0.4s ease-out forwards;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
 .n-app:hover[data-label]::after {
-    animation: labelFadeIn 0.3s ease-out forwards;
+    opacity: 1;
+    transform: translateY(-3px);
 }
 
 .n-widget-box[data-label]::after {
@@ -1514,21 +1515,18 @@ body.reader-mode .sp-content {
     position: absolute;
     bottom: 5px;
     left: 50%;
-    transform: translateX(-50%) translateY(5px);
+    transform: translateX(-50%) translateY(0);
     font-size: 11px;
     color: #aaa;
     font-family: 'Segoe UI', sans-serif;
     font-weight: 500;
     white-space: nowrap;
-    opacity: 0;
-    animation: labelFadeIn 0.4s ease-out forwards;
+    opacity: 1;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
-@keyframes labelFadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.n-widget-box:hover[data-label]::after {
+    transform: translateX(-50%) translateY(-3px);
 }
 
 /* Solid Black Circular Icons */
