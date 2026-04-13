@@ -29,14 +29,11 @@ body, html {
 
 /* Desktop Background */
 .desktop {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100vw;
     height: 100vh;
     background: url('background.jpg') no-repeat center center/cover;
     background-color: #0a0a0a;
-    z-index: 1;
 }
 
 .desktop-icon {
@@ -1329,7 +1326,7 @@ body.reader-mode .sp-content {
 
 /* --- VIEW SWITCHING LOGIC --- */
 /* Default: Show Desktop, Hide Mobile */
-.desktop-ui { display: block; height: 100%; }
+.desktop-ui { display: block; height: 100%; position: relative; z-index: 1; }
 .mobile-ui { display: none; }
 
 /* Mobile View: Hide Desktop, Show Nothing OS */
