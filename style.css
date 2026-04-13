@@ -1326,7 +1326,7 @@ body.reader-mode .sp-content {
 
 /* --- VIEW SWITCHING LOGIC --- */
 /* Default: Show Desktop, Hide Mobile */
-.desktop-ui { display: block; height: 100%; position: relative; z-index: 1; }
+.desktop-ui { display: block; height: 100%; }
 .mobile-ui { display: none; }
 
 /* Mobile View: Hide Desktop, Show Nothing OS */
@@ -2330,7 +2330,6 @@ body.reader-mode .sp-content {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
     pointer-events: none;
     display: none;
 }
