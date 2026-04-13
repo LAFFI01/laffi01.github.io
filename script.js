@@ -1704,6 +1704,9 @@ function startDancingAnimation() {
     const mobileSVG = document.getElementById('pixelFaceSVG');
     const svgs = [desktopSVG, mobileSVG].filter(s => s !== null);
     
+    // Get mobile pixel face container for body dancing
+    const mobilePixelFaceContainer = document.querySelector('.n-app-grid .n-pixel-face');
+    
     if (svgs.length === 0) return;
     
     let animationStep = 0;
@@ -1714,7 +1717,7 @@ function startDancingAnimation() {
             return;
         }
         
-        // Apply same animation to all pixel face versions
+        // Apply facial animation to all pixel face versions
         svgs.forEach(pixelFaceSVG => {
             const eyesOpen = pixelFaceSVG.querySelector('.eyes-open');
             const eyesClosed = pixelFaceSVG.querySelector('.eyes-closed');
@@ -1781,6 +1784,35 @@ function startDancingAnimation() {
             }
         });
         
+        // Add body dancing to mobile pixel face container
+        if (mobilePixelFaceContainer) {
+            switch (animationStep % 8) {
+                case 0:
+                case 2:
+                    // Bounce up
+                    mobilePixelFaceContainer.style.transform = 'scale(1.1) translateY(-5px)';
+                    break;
+                case 1:
+                case 3:
+                    // Bounce down
+                    mobilePixelFaceContainer.style.transform = 'scale(0.95) translateY(3px)';
+                    break;
+                case 4:
+                    // Slight tilt/head bob
+                    mobilePixelFaceContainer.style.transform = 'scale(1) rotate(-3deg)';
+                    break;
+                case 5:
+                    // Tilt other way
+                    mobilePixelFaceContainer.style.transform = 'scale(1) rotate(3deg)';
+                    break;
+                case 6:
+                case 7:
+                    // Back to normal
+                    mobilePixelFaceContainer.style.transform = 'scale(1) rotate(0deg) translateY(0)';
+                    break;
+            }
+        }
+        
         animationStep++;
     }, 300); // Change expression every 300ms for dancing effect
 }
@@ -1807,6 +1839,11 @@ function toggleMusic() {
             // Reset eyes and mouth to normal
             resetFaceExpression();
         });
+        // Reset mobile pixel face body animations
+        const mobilePixelFaceContainer = document.querySelector('.n-app-grid .n-pixel-face');
+        if (mobilePixelFaceContainer) {
+            mobilePixelFaceContainer.style.transform = 'scale(1) rotate(0deg) translateY(0)';
+        }
     } else {
         audioPlayer.play().catch(err => {
             console.warn('Could not play audio:', err);
