@@ -2323,7 +2323,7 @@ body.reader-mode .sp-content {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Matrix Canvas Overlay */
+/* Matrix Canvas - Background Layer */
 .matrix-canvas {
     position: fixed;
     top: 0;
@@ -2332,6 +2332,7 @@ body.reader-mode .sp-content {
     height: 100vh;
     pointer-events: none;
     display: none;
+    z-index: -9999;
 }
 
 /* --- PIXEL FACE MODES --- */
