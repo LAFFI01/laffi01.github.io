@@ -1074,8 +1074,10 @@ function dragElement(elmnt, header) {
         pos3 = e.clientX;
         pos4 = e.clientY;
         
-        // Enable GPU acceleration for smooth dragging
-        elmnt.style.willChange = 'top, left';
+        // Enable GPU acceleration only for non-pixel-face elements
+        if (!elmnt.classList.contains('pixel-face-widget')) {
+            elmnt.style.willChange = 'top, left';
+        }
         
         // Prevent text selection during drag
         document.body.style.userSelect = 'none';
@@ -1101,8 +1103,10 @@ function dragElement(elmnt, header) {
         pos3 = e.touches[0].clientX;
         pos4 = e.touches[0].clientY;
         
-        // Enable GPU acceleration for smooth dragging
-        elmnt.style.willChange = 'top, left';
+        // Enable GPU acceleration only for non-pixel-face elements
+        if (!elmnt.classList.contains('pixel-face-widget')) {
+            elmnt.style.willChange = 'top, left';
+        }
         
         // Prevent text selection during drag
         document.body.style.userSelect = 'none';
@@ -1165,8 +1169,10 @@ function dragElement(elmnt, header) {
         if (!isDragging) return;
         isDragging = false;
         
-        // Disable GPU acceleration after drag
-        elmnt.style.willChange = 'auto';
+        // Disable GPU acceleration after drag (only if it was set)
+        if (!elmnt.classList.contains('pixel-face-widget')) {
+            elmnt.style.willChange = 'auto';
+        }
         
         // Restore text selection
         document.body.style.userSelect = '';
@@ -2068,6 +2074,34 @@ function cycleFaceMode() {
     if (newMode === 'hacker') reaction = 'cool';
     
     showPixelFaceMessage(modeMessages[newMode], 3000, reaction);
+}
+
+// --- DESKTOP WINDOW SHAKE DETECTION ---
+function setupDesktopWindowShake() {
+    let lastScreenX = window.screenX;
+    let lastScreenY = window.screenY;
+    let shakeCount = 0;
+    let shakeTimeout;
+    
+    // Monitor window position changes relative to the actual monitor screen
+    setInterval(() => {
+        const currentX = window.screenX;
+        const currentY = window.screenY;
+        const deltaX = Math.abs(currentX - lastScreenX);
+        const deltaY = Math.abs(currentY - lastScreenY);
+        
+        if (deltaX > 25 || deltaY > 25) { // If window moved more than 25px rapidly
+            shakeCount++;
+            if (shakeCount > 5) {
+                showPixelFaceMessage("Whoa! Earthquake! Stop shaking the browser window! 😵‍💫", 3500, 'dizzy');
+                shakeCount = 0; // Reset
+            }
+            clearTimeout(shakeTimeout);
+            shakeTimeout = setTimeout(() => shakeCount = 0, 500);
+        }
+        lastScreenX = currentX;
+        lastScreenY = currentY;
+    }, 50);
 }
 
 // --- PIXEL FACE EASTER EGGS & SPECIAL REACTIONS ---
@@ -3175,6 +3209,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- PIXEL FACE EASTER EGGS & SPECIAL REACTIONS ---
     setupPixelFaceEasterEggs();
     
+    // --- DESKTOP WINDOW SHAKE ---
+    setupDesktopWindowShake();
+
     // --- PIXEL FACE HELPER SYSTEM ---
     setupPixelFaceHelper();
     
