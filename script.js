@@ -3352,7 +3352,6 @@ function initializeDockTooltips() {
 
 // --- MATRIX RAIN EFFECT ---
 let matrixInterval = null;
-let matrixTiltHandler = null;
 function toggleMatrix() {
     const canvas = document.getElementById('matrix-canvas');
     if (!canvas) return;
@@ -3361,14 +3360,8 @@ function toggleMatrix() {
         clearInterval(matrixInterval);
         matrixInterval = null;
         canvas.style.display = 'none';
-        canvas.style.transform = ''; // Reset 3D transform
         showPixelFaceMessage("Matrix mode disabled! 🔙", 2000, 'normal');
         
-        if (matrixTiltHandler) {
-            document.removeEventListener('mousemove', matrixTiltHandler);
-            matrixTiltHandler = null;
-        }
-
         // Revert face mode if it was hacker
         const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
         faces.forEach(face => {
@@ -3411,17 +3404,6 @@ function toggleMatrix() {
 
     matrixInterval = setInterval(draw, 30);
     
-    // Add 3D Interactive Tilt
-    canvas.style.transform = 'scale(1.15) perspective(1000px) rotateX(0deg) rotateY(0deg)';
-    matrixTiltHandler = (e) => {
-        // Calculate tilt relative to the center of the viewport
-        const xAxis = (window.innerWidth / 2 - e.clientX) / 30; // Max tilt ~15-20 degrees
-        const yAxis = (window.innerHeight / 2 - e.clientY) / 30;
-        
-        canvas.style.transform = `scale(1.15) perspective(1000px) rotateX(${yAxis}deg) rotateY(${-xAxis}deg)`;
-    };
-    document.addEventListener('mousemove', matrixTiltHandler);
-
     // Enter Hacker mode and show message
     showPixelFaceMessage("Wake up, Neo... 🕶️💻", 3500, 'cool');
     const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
