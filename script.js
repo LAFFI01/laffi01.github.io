@@ -3322,6 +3322,9 @@ function initializeDockTooltips() {
                 });
                 konamiIndex = 0;
             }
+        } else if (e.key === konamiCode[0] || e.key.toLowerCase() === konamiCode[0]) {
+            // If wrong key, but it's the first key, start over with index 1
+            konamiIndex = 1;
         } else {
             konamiIndex = 0;
         }
@@ -3344,6 +3347,9 @@ function initializeDockTooltips() {
                 });
                 loveIndex = 0;
             }
+        } else if (e.key.toLowerCase() === loveCode[0]) {
+            // If wrong key, but it's the first letter, start over with index 1
+            loveIndex = 1;
         } else {
             loveIndex = 0;
         }
