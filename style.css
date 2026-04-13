@@ -34,6 +34,7 @@ body, html {
     height: 100vh;
     background: url('background.jpg') no-repeat center center/cover;
     background-color: #0a0a0a;
+    z-index: 1;
 }
 
 .desktop-icon {
@@ -1326,7 +1327,7 @@ body.reader-mode .sp-content {
 
 /* --- VIEW SWITCHING LOGIC --- */
 /* Default: Show Desktop, Hide Mobile */
-.desktop-ui { display: block; height: 100%; }
+.desktop-ui { display: block; height: 100%; position: relative; z-index: 1; }
 .mobile-ui { display: none; }
 
 /* Mobile View: Hide Desktop, Show Nothing OS */
@@ -2330,7 +2331,7 @@ body.reader-mode .sp-content {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -100;
+    z-index: 0;
     pointer-events: none;
     display: none;
 }
