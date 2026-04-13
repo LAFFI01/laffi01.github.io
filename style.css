@@ -87,7 +87,6 @@ body, html {
     user-select: none;
     transition: border-color 0.2s, background 0.2s, filter 0.2s;
     z-index: 5;
-    contain: layout style paint;
 }
 
 .pixel-face-widget:active {

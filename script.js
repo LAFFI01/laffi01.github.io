@@ -423,12 +423,13 @@ function updateTerminalPrompt() {
     }
 }
 
+const terminalOutput = document.querySelector('#terminal-output');
+const terminalInput = document.querySelector('#terminal-input');
+
 function processTerminalCommand(command) {
-    const terminalOutput = document.querySelector('#terminal-output');
-    const terminalInput = document.querySelector('#terminal-input');
     const prompt = `<span class="prompt-user">${currentUser.username}</span><span class="terminal-colon">@</span>${currentUser.hostname}<span class="terminal-colon">:</span><span class="prompt-path">~/CODE/MY_ML</span><span class="terminal-dollar">$</span>`;
     
-    if (!terminalOutput) return;
+    if (!terminalOutput || !terminalInput) return;
     
     // Display user command
     let output = terminalOutput.innerHTML;
