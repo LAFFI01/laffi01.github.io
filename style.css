@@ -1569,6 +1569,7 @@ body.reader-mode .sp-content {
     height: 100%;
     image-rendering: pixelated;
     position: relative;
+    z-index: 100;
 }
 
 .n-pixel-face svg {
