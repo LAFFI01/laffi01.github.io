@@ -762,6 +762,7 @@ function setupMobileDragElement(element) {
     let dragThreshold = 10; // pixels before drag starts
     let dragStarted = false;
     let lastEdgeScrollTime = 0;
+    let resetTiltTimeout;
     
     // Mark as already set up
     if (element.dataset.dragSetup === 'true') return;
@@ -824,7 +825,7 @@ function setupMobileDragElement(element) {
                 element.style.width = elementWidth + 'px';
                 element.style.height = elementHeight + 'px';
                 element.style.margin = '0';
-                element.style.transform = 'scale(1.15)';
+                element.style.transform = 'scale(1.15) perspective(800px) rotateX(0deg) rotateY(0deg)';
                 element.style.opacity = '0.95';
                 element.style.filter = 'drop-shadow(0 8px 20px rgba(0, 0, 0, 0.8))';
                 element.style.cursor = 'grabbing';
@@ -875,9 +876,22 @@ function setupMobileDragElement(element) {
                 }
             }
 
-            // Update position
+            // --- 3D TILT EFFECT ---
+            // Calculate tilt based on movement velocity
+            const tiltX = Math.max(-25, Math.min(25, -moveY * 1.5));
+            const tiltY = Math.max(-25, Math.min(25, moveX * 1.5));
+
+            // Update position and apply 3D transform
             element.style.left = currentX + 'px';
             element.style.top = currentY + 'px';
+            element.style.transform = `scale(1.15) perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            
+            clearTimeout(resetTiltTimeout);
+            resetTiltTimeout = setTimeout(() => {
+                if (isDragging && dragStarted) {
+                    element.style.transform = 'scale(1.15) perspective(800px) rotateX(0deg) rotateY(0deg)';
+                }
+            }, 100);
             
             lastX = clientX;
             lastY = clientY;
@@ -888,6 +902,7 @@ function setupMobileDragElement(element) {
     const endDrag = () => {
         if (!isDragging) return;
         isDragging = false;
+        clearTimeout(resetTiltTimeout);
         
         // If drag actually happened (moved enough), show landing animation
         if (dragStarted) {
@@ -1168,6 +1183,29 @@ let terminalOriginalState = {
 function closeTerminal() {
     if (terminalWindow) {
         terminalWindow.style.display = 'none';
+        
+        // Reset to default size and position when closing
+        terminalWindow.style.width = '700px';
+        terminalWindow.style.height = '450px';
+        terminalWindow.style.top = '50px';
+        terminalWindow.style.left = '50px';
+        terminalWindow.style.zIndex = '10';
+        
+        // Reset minimized/maximized states
+        isTerminalMinimized = false;
+        isTerminalMaximized = false;
+        
+        // Show window content
+        const windowContent = terminalWindow.querySelector('.window-content');
+        if (windowContent) {
+            windowContent.style.display = 'block';
+        }
+        
+        // Reset title bar border radius
+        const titleBar = terminalWindow.querySelector('.title-bar');
+        if (titleBar) {
+            titleBar.style.borderRadius = '8px 8px 0 0';
+        }
     }
 }
 
@@ -1237,6 +1275,21 @@ function maximizeTerminal() {
 function closeMusic() {
     if (musicPlayerWindow) {
         musicPlayerWindow.style.display = 'none';
+        
+        // Reset to default size and position when closing
+        musicPlayerWindow.style.width = '320px';
+        musicPlayerWindow.style.height = 'auto';
+        musicPlayerWindow.style.bottom = '70px';
+        musicPlayerWindow.style.right = '40px';
+        musicPlayerWindow.style.top = 'auto';
+        musicPlayerWindow.style.left = 'auto';
+        musicPlayerWindow.style.zIndex = '10';
+        
+        // Hide playlist view and show now playing
+        const playlistView = musicPlayerWindow.querySelector('.sp-playlist');
+        const nowPlayingView = musicPlayerWindow.querySelector('#sp-now-playing');
+        if (playlistView) playlistView.style.display = 'none';
+        if (nowPlayingView) nowPlayingView.style.display = 'block';
     }
 }
 
