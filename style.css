@@ -213,6 +213,10 @@ body, html {
     flex-direction: column;
     overflow: hidden;
     touch-action: none;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .title-bar {
@@ -226,6 +230,8 @@ body, html {
     cursor: move;
     user-select: none;
     -webkit-user-select: none;
+    pointer-events: auto;
+    flex-shrink: 0;
 }
 
 .title-left, .title-right {
@@ -252,12 +258,33 @@ body, html {
     font-size: 14px;
     flex-grow: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     line-height: 1.6;
     white-space: pre-wrap;
     word-wrap: break-word;
     border-bottom: 1px solid var(--border-color);
     user-select: text;
     -webkit-user-select: text;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Scrollbar styling for smooth rendering */
+.window-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.window-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.window-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.window-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* Terminal Text Colors */
@@ -333,6 +360,10 @@ body, html {
     height: auto !important;
     background: #121212 !important;
     touch-action: none;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 /* Spotify Music Player Styles */
@@ -346,6 +377,8 @@ body, html {
     cursor: move;
     user-select: none;
     -webkit-user-select: none;
+    pointer-events: auto;
+    flex-shrink: 0;
 }
 
 .sp-header-icon {

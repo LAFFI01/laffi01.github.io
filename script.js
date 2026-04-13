@@ -1057,13 +1057,14 @@ window.addEventListener('resize', () => {
 function dragElement(elmnt, header) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     let isDragging = false;
+    let dragMouseMoveHandler, dragMouseUpHandler, dragTouchMoveHandler, dragTouchEndHandler;
     
     if (header) {
         header.addEventListener('mousedown', dragMouseDown);
-        header.addEventListener('touchstart', dragTouchStart);
+        header.addEventListener('touchstart', dragTouchStart, { passive: false });
     } else {
         elmnt.addEventListener('mousedown', dragMouseDown);
-        elmnt.addEventListener('touchstart', dragTouchStart);
+        elmnt.addEventListener('touchstart', dragTouchStart, { passive: false });
     }
 
     function dragMouseDown(e) {
@@ -1073,28 +1074,51 @@ function dragElement(elmnt, header) {
         pos3 = e.clientX;
         pos4 = e.clientY;
         
+        // Enable GPU acceleration for smooth dragging
+        elmnt.style.willChange = 'top, left';
+        
+        // Prevent text selection during drag
+        document.body.style.userSelect = 'none';
+        document.body.style.webkitUserSelect = 'none';
+        
         // Add dragging class to pixel face for scared expression
         if (elmnt.classList.contains('pixel-face-widget')) {
             elmnt.classList.add('dragging');
         }
         
-        document.addEventListener('mouseup', closeDragElement);
-        document.addEventListener('mousemove', elementDrag);
+        // Create bound handlers to avoid duplicate listeners
+        dragMouseMoveHandler = elementDrag.bind(null);
+        dragMouseUpHandler = closeDragElement.bind(null);
+        
+        document.addEventListener('mousemove', dragMouseMoveHandler);
+        document.addEventListener('mouseup', dragMouseUpHandler);
     }
 
     function dragTouchStart(e) {
         e = e || window.event;
+        if (e.cancelable) e.preventDefault();
         isDragging = true;
         pos3 = e.touches[0].clientX;
         pos4 = e.touches[0].clientY;
+        
+        // Enable GPU acceleration for smooth dragging
+        elmnt.style.willChange = 'top, left';
+        
+        // Prevent text selection during drag
+        document.body.style.userSelect = 'none';
+        document.body.style.webkitUserSelect = 'none';
         
         // Add dragging class to pixel face for scared expression
         if (elmnt.classList.contains('pixel-face-widget')) {
             elmnt.classList.add('dragging');
         }
         
-        document.addEventListener('touchend', closeDragElement);
-        document.addEventListener('touchmove', elementDragTouch);
+        // Create bound handlers
+        dragTouchMoveHandler = elementDragTouch.bind(null);
+        dragTouchEndHandler = closeDragElement.bind(null);
+        
+        document.addEventListener('touchmove', dragTouchMoveHandler, { passive: false });
+        document.addEventListener('touchend', dragTouchEndHandler, { passive: false });
     }
 
     function elementDrag(e) {
@@ -1105,24 +1129,48 @@ function dragElement(elmnt, header) {
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        
+        let newTop = elmnt.offsetTop - pos2;
+        let newLeft = elmnt.offsetLeft - pos1;
+        
+        // Boundary constraints to prevent off-screen dragging
+        newTop = Math.max(0, Math.min(newTop, window.innerHeight - elmnt.offsetHeight));
+        newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - elmnt.offsetWidth));
+        
+        elmnt.style.top = newTop + "px";
+        elmnt.style.left = newLeft + "px";
     }
 
     function elementDragTouch(e) {
         if (!isDragging) return;
         e = e || window.event;
-        e.preventDefault();
+        if (e.cancelable) e.preventDefault();
         pos1 = pos3 - e.touches[0].clientX;
         pos2 = pos4 - e.touches[0].clientY;
         pos3 = e.touches[0].clientX;
         pos4 = e.touches[0].clientY;
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        
+        let newTop = elmnt.offsetTop - pos2;
+        let newLeft = elmnt.offsetLeft - pos1;
+        
+        // Boundary constraints to prevent off-screen dragging
+        newTop = Math.max(0, Math.min(newTop, window.innerHeight - elmnt.offsetHeight));
+        newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - elmnt.offsetWidth));
+        
+        elmnt.style.top = newTop + "px";
+        elmnt.style.left = newLeft + "px";
     }
 
     function closeDragElement() {
+        if (!isDragging) return;
         isDragging = false;
+        
+        // Disable GPU acceleration after drag
+        elmnt.style.willChange = 'auto';
+        
+        // Restore text selection
+        document.body.style.userSelect = '';
+        document.body.style.webkitUserSelect = '';
         
         // Remove dragging class from pixel face
         if (elmnt.classList.contains('pixel-face-widget')) {
@@ -1147,10 +1195,23 @@ function dragElement(elmnt, header) {
             showPixelFaceMessage(digiMsg, 2000, 'excited');
         }
         
-        document.removeEventListener('mouseup', closeDragElement);
-        document.removeEventListener('mousemove', elementDrag);
-        document.removeEventListener('touchend', closeDragElement);
-        document.removeEventListener('touchmove', elementDragTouch);
+        // Remove event listeners properly
+        if (dragMouseMoveHandler) {
+            document.removeEventListener('mousemove', dragMouseMoveHandler);
+            dragMouseMoveHandler = null;
+        }
+        if (dragMouseUpHandler) {
+            document.removeEventListener('mouseup', dragMouseUpHandler);
+            dragMouseUpHandler = null;
+        }
+        if (dragTouchMoveHandler) {
+            document.removeEventListener('touchmove', dragTouchMoveHandler);
+            dragTouchMoveHandler = null;
+        }
+        if (dragTouchEndHandler) {
+            document.removeEventListener('touchend', dragTouchEndHandler);
+            dragTouchEndHandler = null;
+        }
     }
 }
 
@@ -3116,6 +3177,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- PIXEL FACE HELPER SYSTEM ---
     setupPixelFaceHelper();
+    
+    // --- SMART CONTEXT REACTIONS ---
+    setupSmartContextReactions();
     
     // --- MOBILE SWIPE RIGHT GESTURE ---
     setupMobileSwipeGesture();
