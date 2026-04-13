@@ -11,18 +11,464 @@
     <meta property="og:description" content="Interactive web desktop portfolio showcasing data science expertise">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#0f1724">
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="desktop">
+    <div class="desktop-ui">
+        <div class="desktop">
         
         <div class="desktop-icon" role="button" tabindex="0" aria-label="Open home folder">
             <span class="icon">📁</span>
             <span>Home</span>
         </div>
 
-        <div class="window" id="terminal-window" role="complementary" aria-label="Terminal window with profile information">
+        <!-- Pixel Face Widget -->
+        <div class="desktop-widget pixel-face-widget">
+            <svg width="100%" height="100%" viewBox="0 0 64 64" style="max-width: 100%; max-height: 100%;" class="pixel-face-svg" id="pixelFaceSVGDesktop">
+                <!-- Face background -->
+                <rect x="8" y="8" width="48" height="48" fill="#000000" stroke="#FFFFFF" stroke-width="2"/>
+                
+                <!-- Eyes group -->
+                <g class="eyes eyes-open">
+                    <!-- Left eye white -->
+                    <rect x="18" y="18" width="10" height="10" fill="#FFFFFF"/>
+                    <!-- Left pupil -->
+                    <g class="left-pupil" transform="translate(23, 23)">
+                        <rect x="-2" y="-2" width="4" height="4" fill="#000000"/>
+                    </g>
+                    
+                    <!-- Right eye white -->
+                    <rect x="34" y="18" width="10" height="10" fill="#FFFFFF"/>
+                    <!-- Right pupil -->
+                    <g class="right-pupil" transform="translate(39, 23)">
+                        <rect x="-2" y="-2" width="4" height="4" fill="#000000"/>
+                    </g>
+                </g>
+                
+                <!-- Eyes closed (blink) -->
+                <g class="eyes eyes-closed" style="opacity: 0;">
+                    <!-- Left eye closed -->
+                    <rect x="18" y="26" width="10" height="4" fill="#FFFFFF"/>
+                    
+                    <!-- Right eye closed -->
+                    <rect x="34" y="26" width="10" height="4" fill="#FFFFFF"/>
+                </g>
+                
+                <!-- Eyes scared (wide/big) -->
+                <g class="eyes eyes-scared" style="opacity: 0;">
+                    <!-- Left eye wide -->
+                    <rect x="16" y="16" width="14" height="14" fill="#FFFFFF"/>
+                    <!-- Left pupil -->
+                    <g class="left-pupil-scared" transform="translate(23, 23)">
+                        <rect x="-3" y="-3" width="6" height="6" fill="#000000"/>
+                    </g>
+                    
+                    <!-- Right eye wide -->
+                    <rect x="34" y="16" width="14" height="14" fill="#FFFFFF"/>
+                    <!-- Right pupil -->
+                    <g class="right-pupil-scared" transform="translate(41, 23)">
+                        <rect x="-3" y="-3" width="6" height="6" fill="#000000"/>
+                    </g>
+                </g>
+                
+                <!-- Eyes punched (Spiral/dizzy eyes) -->
+                <g class="eyes eyes-punched" style="opacity: 0;">
+                    <!-- Left spiral eye -->
+                    <circle cx="22" cy="24" r="5" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+                    <path d="M 22 19 Q 27 22 22 27 Q 17 24 22 19" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+                    
+                    <!-- Right spiral eye -->
+                    <circle cx="40" cy="24" r="5" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+                    <path d="M 40 19 Q 45 22 40 27 Q 35 24 40 19" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+                    
+                    <!-- Dizzy stars -->
+                    <g class="dizzy-stars">
+                        <text x="12" y="12" font-size="6" fill="#FFFFFF">✦</text>
+                        <text x="48" y="12" font-size="6" fill="#FFFFFF">✦</text>
+                        <text x="12" y="50" font-size="6" fill="#FFFFFF">✦</text>
+                        <text x="48" y="50" font-size="6" fill="#FFFFFF">✦</text>
+                    </g>
+                </g>
+                
+                <!-- Eyebrows group -->
+                <g class="eyebrows eyebrows-neutral" style="opacity: 1;">
+                    <!-- Left eyebrow -->
+                    <line x1="16" y1="14" x2="28" y2="12" stroke="#FFFFFF" stroke-width="2"/>
+                    <!-- Right eyebrow -->
+                    <line x1="36" y1="12" x2="48" y2="14" stroke="#FFFFFF" stroke-width="2"/>
+                </g>
+                
+                <!-- Eyebrows scared (raised) -->
+                <g class="eyebrows eyebrows-scared" style="opacity: 0;">
+                    <!-- Left eyebrow raised -->
+                    <line x1="16" y1="12" x2="28" y2="10" stroke="#FFFFFF" stroke-width="2"/>
+                    <!-- Right eyebrow raised -->
+                    <line x1="36" y1="10" x2="48" y2="12" stroke="#FFFFFF" stroke-width="2"/>
+                </g>
+                
+                <!-- Eyebrows punched (angled down) -->
+                <g class="eyebrows eyebrows-punched" style="opacity: 0;">
+                    <!-- Left eyebrow down -->
+                    <line x1="16" y1="16" x2="28" y2="14" stroke="#FFFFFF" stroke-width="2"/>
+                    <!-- Right eyebrow down -->
+                    <line x1="36" y1="14" x2="48" y2="16" stroke="#FFFFFF" stroke-width="2"/>
+                </g>
+                
+                <!-- Eyebrows angry (V shape) -->
+                <g class="eyebrows eyebrows-angry" style="opacity: 0;">
+                    <!-- Left eyebrow angry -->
+                    <line x1="16" y1="10" x2="28" y2="14" stroke="#FFFFFF" stroke-width="2"/>
+                    <!-- Right eyebrow angry -->
+                    <line x1="36" y1="14" x2="48" y2="10" stroke="#FFFFFF" stroke-width="2"/>
+                </g>
+                
+                <!-- Eyebrows angry (V shape) -->
+                <g class="eyebrows eyebrows-angry" style="opacity: 0;">
+                    <!-- Left eyebrow angry -->
+                    <line x1="16" y1="10" x2="28" y2="14" stroke="#FFFFFF" stroke-width="2"/>
+                    <!-- Right eyebrow angry -->
+                    <line x1="36" y1="14" x2="48" y2="10" stroke="#FFFFFF" stroke-width="2"/>
+                </g>
+                
+                <!-- Mouth group 1 (big smile) -->
+                <g class="mouth mouth-smile-big">
+                    <rect x="20" y="36" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="24" y="36" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="28" y="36" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="32" y="36" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="36" y="36" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="40" y="36" width="4" height="4" fill="#FFFFFF"/>
+                    
+                    <rect x="16" y="40" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="44" y="40" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="20" y="44" width="24" height="4" fill="#FFFFFF"/>
+                </g>
+                
+                <!-- Mouth group 2 (small smile) -->
+                <g class="mouth mouth-smile-small" style="opacity: 0;">
+                    <rect x="24" y="36" width="16" height="4" fill="#FFFFFF"/>
+                    <rect x="20" y="40" width="4" height="4" fill="#FFFFFF"/>
+                    <rect x="40" y="40" width="4" height="4" fill="#FFFFFF"/>
+                </g>
+                
+                <!-- Mouth group 3 (straight line) -->
+                <g class="mouth mouth-straight" style="opacity: 0;">
+                    <rect x="20" y="40" width="24" height="4" fill="#000"/>
+                </g>
+                
+                <!-- Mouth group 4 (scared/O mouth) -->
+                <g class="mouth mouth-scared" style="opacity: 0;">
+                    <circle cx="32" cy="42" r="6" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+                    <circle cx="32" cy="42" r="3" fill="#000000"/>
+                </g>
+                
+                <!-- Mouth group 5 (sad/punched mouth) -->
+                <g class="mouth mouth-punched" style="opacity: 0;">
+                    <polyline points="20,38 24,42 28,38 32,42 36,38 40,42 44,38" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+            </svg>
+            <!-- Speech Bubble -->
+            <div class="pixel-face-speech-bubble" id="pixelFaceSpeechBubble">
+                <div class="speech-bubble-content">
+                    <p class="speech-text" id="speechText">Hey! I'm your helper! Feel free to explore the page.</p>
+                </div>
+                <div class="speech-bubble-pointer"></div>
+                <button class="speech-bubble-close" id="closeSpeech" aria-label="Close helper message">×</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="mobile-ui nothing-theme">
+        <div class="n-status-bar">
+            <span class="n-time" id="n-time">12:00</span>
+            <div class="n-status-icons">
+                <span style="color: #ea3323;">●</span>
+                <span>VoLTE</span>
+                <span>100%</span>
+            </div>
+        </div>
+
+        <div class="n-top-widgets">
+            <div class="n-widget-box n-clock-container">
+                <div class="n-analog-clock">
+                    <div class="clock-mark-12"></div>
+                    <div class="clock-mark-3"></div>
+                    <div class="clock-mark-6"></div>
+                    <div class="clock-mark-9"></div>
+                    <div class="hand hour-hand" id="hour-hand"></div>
+                    <div class="hand min-hand" id="min-hand"></div>
+                    <div class="hand second-hand" id="sec-hand"></div>
+                    <div class="clock-center"></div>
+                </div>
+            </div>
+            
+            <div class="n-widget-box n-music-box" id="n-music-toggle">
+                <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=400&auto=format&fit=crop" class="n-music-bg" alt="Album Art">
+                <div class="n-music-overlay">
+                    <div class="n-track">Hit The Road</div>
+                    <div class="n-artist">LAFFI_01</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="n-app-carousel" id="nAppCarousel">
+            <div class="n-app-grid">
+            <div class="n-app" id="n-terminal-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.9,3 4,3H20M8.97,10.53L5.47,14L4.06,12.59L6.16,10.5L4.06,8.41L5.47,7L8.97,10.53M10,14H19V16H10V14Z"/>
+                    </svg>
+                </div>
+            </div>
+            <a href="anime.html" class="n-app" style="text-decoration: none;">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <!-- Straw Hat Brim -->
+                        <ellipse cx="12" cy="8" rx="10" ry="3" fill="#f44336" opacity="0.9"/>
+                        <path d="M2 8 Q2 6 12 5 Q22 6 22 8" stroke="#c62828" stroke-width="0.8" fill="none"/>
+                        
+                        <!-- Hat Crown -->
+                        <path d="M4 8 L5 12 Q5 15 12 16 Q19 15 19 12 L20 8" fill="#d32f2f" stroke="#b71c1c" stroke-width="0.5"/>
+                        
+                        <!-- Red Band -->
+                        <ellipse cx="12" cy="12.5" rx="7.5" ry="1.5" fill="#f44336"/>
+                        
+                        <!-- Anchor Symbol (iconic One Piece detail) -->
+                        <g transform="translate(12, 10)">
+                            <circle cx="0" cy="0" r="0.8" fill="white" opacity="0.8"/>
+                            <path d="M-0.5 0.5 L0.5 0.5" stroke="white" stroke-width="0.3" opacity="0.8"/>
+                        </g>
+                    </svg>
+                </div>
+            </a>
+            <div class="n-app" id="n-music-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.659.3 1.02z"/>
+                    </svg>
+                </div>
+            </div>
+            <a href="https://github.com/LAFFI01" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 16 16" fill="white" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                </div>
+            </a>
+            
+            <div class="n-widget-box n-pixel-face" style="grid-column: span 2; grid-row: span 2; position: relative;">
+                <svg width="100%" height="100%" viewBox="0 0 64 64" style="max-width: 100%; max-height: 100%;" class="pixel-face-svg" id="pixelFaceSVG">
+                    <!-- Face background -->
+                    <rect x="8" y="8" width="48" height="48" fill="#000000" stroke="#FFFFFF" stroke-width="2"/>
+                    
+                    <!-- Eyes group -->
+                    <g class="eyes eyes-open">
+                        <!-- Left eye white -->
+                        <rect x="18" y="18" width="10" height="10" fill="#FFFFFF"/>
+                        <!-- Left pupil -->
+                        <g class="left-pupil" transform="translate(23, 23)">
+                            <rect x="-2" y="-2" width="4" height="4" fill="#000000"/>
+                        </g>
+                        
+                        <!-- Right eye white -->
+                        <rect x="34" y="18" width="10" height="10" fill="#FFFFFF"/>
+                        <!-- Right pupil -->
+                        <g class="right-pupil" transform="translate(39, 23)">
+                            <rect x="-2" y="-2" width="4" height="4" fill="#000000"/>
+                        </g>
+                    </g>
+                    
+                    <!-- Eyes closed (blink) -->
+                    <g class="eyes eyes-closed" style="opacity: 0;">
+                        <!-- Left eye closed -->
+                        <rect x="18" y="26" width="10" height="4" fill="#FFFFFF"/>
+                        
+                        <!-- Right eye closed -->
+                        <rect x="34" y="26" width="10" height="4" fill="#FFFFFF"/>
+                    </g>
+                    
+                    <!-- Eyes scared (wide/big) -->
+                    <g class="eyes eyes-scared" style="opacity: 0;">
+                        <!-- Left eye wide -->
+                        <rect x="16" y="16" width="14" height="14" fill="#FFFFFF"/>
+                        <!-- Left pupil -->
+                        <g class="left-pupil-scared" transform="translate(23, 23)">
+                            <rect x="-3" y="-3" width="6" height="6" fill="#000000"/>
+                        </g>
+                        
+                        <!-- Right eye wide -->
+                        <rect x="34" y="16" width="14" height="14" fill="#FFFFFF"/>
+                        <!-- Right pupil -->
+                        <g class="right-pupil-scared" transform="translate(41, 23)">
+                            <rect x="-3" y="-3" width="6" height="6" fill="#000000"/>
+                        </g>
+                    </g>
+                    
+                    <!-- Eyes punched (Spiral/dizzy eyes) -->
+                    <g class="eyes eyes-punched" style="opacity: 0;">
+                        <!-- Left spiral eye -->
+                        <circle cx="22" cy="24" r="5" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+                        <path d="M 22 19 Q 27 22 22 27 Q 17 24 22 19" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+                        
+                        <!-- Right spiral eye -->
+                        <circle cx="40" cy="24" r="5" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+                        <path d="M 40 19 Q 45 22 40 27 Q 35 24 40 19" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+                        
+                        <!-- Dizzy stars -->
+                        <g class="dizzy-stars">
+                            <text x="12" y="12" font-size="6" fill="#FFFFFF">✦</text>
+                            <text x="48" y="12" font-size="6" fill="#FFFFFF">✦</text>
+                            <text x="12" y="50" font-size="6" fill="#FFFFFF">✦</text>
+                            <text x="48" y="50" font-size="6" fill="#FFFFFF">✦</text>
+                        </g>
+                    </g>
+                    
+                    <!-- Eyebrows group -->
+                    <g class="eyebrows eyebrows-neutral" style="opacity: 1;">
+                        <!-- Left eyebrow -->
+                        <line x1="16" y1="14" x2="28" y2="12" stroke="#FFFFFF" stroke-width="2"/>
+                        <!-- Right eyebrow -->
+                        <line x1="36" y1="12" x2="48" y2="14" stroke="#FFFFFF" stroke-width="2"/>
+                    </g>
+                    
+                    <!-- Eyebrows scared (raised) -->
+                    <g class="eyebrows eyebrows-scared" style="opacity: 0;">
+                        <!-- Left eyebrow raised -->
+                        <line x1="16" y1="12" x2="28" y2="10" stroke="#FFFFFF" stroke-width="2"/>
+                        <!-- Right eyebrow raised -->
+                        <line x1="36" y1="10" x2="48" y2="12" stroke="#FFFFFF" stroke-width="2"/>
+                    </g>
+                    
+                    <!-- Eyebrows punched (angled down) -->
+                    <g class="eyebrows eyebrows-punched" style="opacity: 0;">
+                        <!-- Left eyebrow down -->
+                        <line x1="16" y1="16" x2="28" y2="14" stroke="#FFFFFF" stroke-width="2"/>
+                        <!-- Right eyebrow down -->
+                        <line x1="36" y1="14" x2="48" y2="16" stroke="#FFFFFF" stroke-width="2"/>
+                    </g>
+                    
+                    <!-- Mouth group 1 (big smile) -->
+                    <g class="mouth mouth-smile-big">
+                        <rect x="20" y="36" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="24" y="36" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="28" y="36" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="32" y="36" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="36" y="36" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="40" y="36" width="4" height="4" fill="#FFFFFF"/>
+                        
+                        <rect x="16" y="40" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="44" y="40" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="20" y="44" width="24" height="4" fill="#FFFFFF"/>
+                    </g>
+                    
+                    <!-- Mouth group 2 (small smile) -->
+                    <g class="mouth mouth-smile-small" style="opacity: 0;">
+                        <rect x="24" y="36" width="16" height="4" fill="#FFFFFF"/>
+                        <rect x="20" y="40" width="4" height="4" fill="#FFFFFF"/>
+                        <rect x="40" y="40" width="4" height="4" fill="#FFFFFF"/>
+                    </g>
+                    
+                    <!-- Mouth group 3 (straight line) -->
+                    <g class="mouth mouth-straight" style="opacity: 0;">
+                        <rect x="20" y="40" width="24" height="4" fill="#000"/>
+                    </g>
+                    
+                    <!-- Mouth group 4 (scared/O mouth) -->
+                    <g class="mouth mouth-scared" style="opacity: 0;">
+                        <circle cx="32" cy="42" r="6" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+                        <circle cx="32" cy="42" r="3" fill="#000000"/>
+                    </g>
+                    
+                    <!-- Mouth group 5 (sad/punched mouth) -->
+                    <g class="mouth mouth-punched" style="opacity: 0;">
+                        <polyline points="20,38 24,42 28,38 32,42 36,38 40,42 44,38" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                </svg>
+                
+                <!-- Mobile Speech Bubble -->
+                <div class="pixel-face-speech-bubble hidden" id="mobilePixelFaceSpeechBubble" style="bottom: 105%; top: auto; z-index: 10000; pointer-events: none; width: 200px;">
+                    <div class="speech-bubble-content">
+                        <p class="speech-text" id="mobileSpeechText"></p>
+                    </div>
+                    <div class="speech-bubble-pointer"></div>
+                </div>
+            </div>
+
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=khatrijr01@gmail.com&su=Collaboration%20Inquiry&body=Hello%20LAFFI_01,%0A%0AI%20saw%20your%20portfolio%20and%20I'm%20interested%20in%20working%20with%20you." target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" fill="none" stroke="white" stroke-width="1.5"/>
+                        <path d="M21 6L12 13 3 6" fill="none" stroke="white" stroke-width="1.5"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://linkedin.com/in/sandesh-khatri-a58457284" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.722-2.006 1.423-.103.249-.129.597-.129.946v5.436h-3.554s.05-8.81 0-9.728h3.554v1.375c.427-.659 1.191-1.592 2.897-1.592 2.117 0 3.704 1.379 3.704 4.342v5.603zM5.337 8.855c-1.144 0-1.915-.759-1.915-1.71 0-.957.77-1.71 1.958-1.71 1.187 0 1.914.753 1.938 1.71 0 .951-.751 1.71-1.981 1.71zm1.61 11.597H3.73V9.024h3.217v11.428zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://www.youtube.com/@IAMAI-f5k?sub_confirmation=1" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://www.kaggle.com/" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 32 32" fill="white" aria-hidden="true">
+                        <path d="M22.5 32H28L18.4 16.9 27.6 0H22.1L14.5 14.1 10.9 9.8V0H5.5V32H10.9V21.1L15.3 16.1 22.5 32z"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://instagram.com/laffi_01" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://www.tiktok.com/@laffi.01?is_from_webapp=1&sender_device=pc" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://facebook.com/sandesh.khatri.631170" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="https://twitter.com/laffi1111" target="_blank" class="n-app">
+                <div class="n-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.07-6.628-5.848 6.628H2.42l7.723-8.835L1.254 2.25h6.554l4.882 6.467Z"/>
+                    </svg>
+                </div>
+            </a>
+        </div>
+        </div>
+
+        <div class="n-search-bar">
+                <div style="position: relative; width: 100%;">
+                    <svg style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; fill: none; stroke: #888; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" placeholder="Search apps..." id="n-search-input" class="n-search-input" style="padding-left: 45px;">
+                </div>
+        </div>
+    </div>
+
+    <div class="window" id="terminal-window" style="display:none;" role="complementary" aria-label="Terminal window with profile information">
             <div class="title-bar" id="terminal-header" role="navigation" aria-label="Terminal window controls">
                 <div class="title-left">
                     <span>|&gt;_</span>
@@ -263,10 +709,12 @@
     </div>
 
     <audio id="backgroundMusic" style="display: none;" preload="auto" crossorigin="anonymous">
-        <source id="audio-source" src="hit-the-road.mp3" type="audio/mpeg">
+        <source id="audio-source" src="music/hit-the-road.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
     <script src="script.js"></script>
 </body>
 </html>
+
+check all there and fix the mobile side 
