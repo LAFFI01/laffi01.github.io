@@ -442,6 +442,20 @@ function processTerminalCommand(command) {
     if (cmd === '' || cmd === ' ') {
         // Empty command, just show next prompt
         response = '';
+    } else if (cmd === 'iloveu') {
+        // Hidden easter egg - doesn't show in help
+        response = `<br>❤️ Aww... I love you too! 🥰`;
+        showPixelFaceMessage("Aww... I love you too! ❤️🥰", 5000, 'loved');
+        const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+        faces.forEach(face => {
+            face.style.transition = 'transform 0.3s ease';
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    face.style.transform = i % 2 === 0 ? 'scale(1.15)' : 'scale(1)';
+                }, i * 150);
+            }
+            setTimeout(() => { face.style.transform = ''; }, 900);
+        });
     } else if (cmd === 'help' || cmd === '?') {
         response = `<br><strong>Available Commands:</strong>
 <br>  whoami           - Display current user information
@@ -3309,6 +3323,7 @@ function initializeDockTooltips() {
     const loveCode = ['i', 'l', 'o', 'v', 'e', 'u'];
     let loveIndex = 0;
 
+    // Use capturing phase (true) to capture events even when input fields are focused
     document.addEventListener('keydown', (e) => {
         if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
             konamiIndex++;
@@ -3333,7 +3348,7 @@ function initializeDockTooltips() {
         if (e.key.toLowerCase() === loveCode[loveIndex]) {
             loveIndex++;
             if (loveIndex === loveCode.length) {
-                showPixelFaceMessage("Aww... I love you too! ❤️🥰", 4000, 'loved');
+                showPixelFaceMessage("Aww... I love you too! ❤️🥰", 5000, 'loved');
                 // Add heart pulse animation
                 const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
                 faces.forEach(face => {
@@ -3353,7 +3368,7 @@ function initializeDockTooltips() {
         } else {
             loveIndex = 0;
         }
-    });
+    }, true);  // Use capturing phase to work even when input fields are focused
 }
 
 // --- MATRIX RAIN EFFECT ---
