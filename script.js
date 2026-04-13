@@ -453,6 +453,7 @@ function processTerminalCommand(command) {
 <br>  clear            - Clear the terminal
 <br>  echo [text]      - Print text
 <br>  date             - Show current date and time
+<br>  matrix           - Wake up, Neo...
 <br>  mode [name]      - Set face mode (standard, party, hacker, focus)
 <br>  exit             - Close the terminal
 <br>  help             - Show this help message`;
@@ -497,6 +498,9 @@ function processTerminalCommand(command) {
         terminalOutput.innerHTML = '';
         terminalInput.value = '';
         return;
+    } else if (cmd === 'matrix') {
+        toggleMatrix();
+        response = `<br>Entering the Matrix...`;
     } else if (cmd.startsWith('mode ')) {
         const requestedMode = cmd.substring(5).trim();
         if (faceModes.includes(requestedMode)) {
@@ -729,9 +733,9 @@ class MobileAppGrid {
             targetEl.parentNode.insertBefore(element, targetEl);
         }
         
-        // Update the array
-        [this.elements[draggingIndex], this.elements[targetIndex]] = 
-        [this.elements[targetIndex], this.elements[draggingIndex]];
+        // Update the array by correctly shifting elements
+        const [movedElement] = this.elements.splice(draggingIndex, 1);
+        this.elements.splice(targetIndex, 0, movedElement);
         
         return true;
     }
@@ -740,11 +744,12 @@ class MobileAppGrid {
 const appGrid = new MobileAppGrid();
 
 function initializeMobileDragging() {
-    const mobileApps = document.querySelectorAll('.n-app');
-    const mobileWidgets = document.querySelectorAll('.n-widget-box');
-    const allDraggableElements = [...mobileApps, ...mobileWidgets];
-    
     const container = document.querySelector('.n-app-grid');
+    if (!container) return;
+    
+    // ONLY select elements inside the grid (ignores top clock/music widget)
+    const allDraggableElements = Array.from(container.querySelectorAll('.n-app, .n-widget-box'));
+    
     appGrid.initialize(allDraggableElements, container);
     
     allDraggableElements.forEach((element) => {
@@ -3300,6 +3305,10 @@ function initializeDockTooltips() {
     // Konami Code Reaction
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let konamiIndex = 0;
+    
+    const loveCode = ['i', 'l', 'o', 'v', 'e', 'u'];
+    let loveIndex = 0;
+
     document.addEventListener('keydown', (e) => {
         if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
             konamiIndex++;
@@ -3315,6 +3324,28 @@ function initializeDockTooltips() {
             }
         } else {
             konamiIndex = 0;
+        }
+        
+        // I love U Code Reaction
+        if (e.key.toLowerCase() === loveCode[loveIndex]) {
+            loveIndex++;
+            if (loveIndex === loveCode.length) {
+                showPixelFaceMessage("Aww... I love you too! ❤️🥰", 4000, 'loved');
+                // Add heart pulse animation
+                const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+                faces.forEach(face => {
+                    face.style.transition = 'transform 0.3s ease';
+                    for (let i = 0; i < 6; i++) {
+                        setTimeout(() => {
+                            face.style.transform = i % 2 === 0 ? 'scale(1.15)' : 'scale(1)';
+                        }, i * 150);
+                    }
+                    setTimeout(() => { face.style.transform = ''; }, 900);
+                });
+                loveIndex = 0;
+            }
+        } else {
+            loveIndex = 0;
         }
     });
 }
