@@ -83,7 +83,7 @@ function initializeVolumeControl() {
         }
         updateVolumeSliderFill();
         saveVolumeToSessionStorage();
-        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🤫", 2000, 'cute');
+        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("MAX VOLUME! LET'S GOOO! 🔊🔥", 2500, 'excited');
     });
     
     // Max volume button
@@ -96,7 +96,7 @@ function initializeVolumeControl() {
         }
         updateVolumeSliderFill();
         saveVolumeToSessionStorage();
-        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("MAX VOLUME! LET'S GOOO! 🔊🔥", 2500, 'excited');
+        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🤫", 2000, 'cute');
     });
     
     // Update slider fill color
@@ -423,13 +423,12 @@ function updateTerminalPrompt() {
     }
 }
 
-const terminalOutput = document.querySelector('#terminal-output');
-const terminalInput = document.querySelector('#terminal-input');
-
 function processTerminalCommand(command) {
+    const terminalOutput = document.querySelector('#terminal-output');
+    const terminalInput = document.querySelector('#terminal-input');
     const prompt = `<span class="prompt-user">${currentUser.username}</span><span class="terminal-colon">@</span>${currentUser.hostname}<span class="terminal-colon">:</span><span class="prompt-path">~/CODE/MY_ML</span><span class="terminal-dollar">$</span>`;
     
-    if (!terminalOutput || !terminalInput) return;
+    if (!terminalOutput) return;
     
     // Display user command
     let output = terminalOutput.innerHTML;
@@ -763,6 +762,7 @@ function setupMobileDragElement(element) {
     let dragThreshold = 10; // pixels before drag starts
     let dragStarted = false;
     let lastEdgeScrollTime = 0;
+    let resetTiltTimeout;
     
     // Mark as already set up
     if (element.dataset.dragSetup === 'true') return;
@@ -825,7 +825,7 @@ function setupMobileDragElement(element) {
                 element.style.width = elementWidth + 'px';
                 element.style.height = elementHeight + 'px';
                 element.style.margin = '0';
-                element.style.transform = 'scale(1.15)';
+                element.style.transform = 'scale(1.15) perspective(800px) rotateX(0deg) rotateY(0deg)';
                 element.style.opacity = '0.95';
                 element.style.filter = 'drop-shadow(0 8px 20px rgba(0, 0, 0, 0.8))';
                 element.style.cursor = 'grabbing';
@@ -876,9 +876,22 @@ function setupMobileDragElement(element) {
                 }
             }
 
-            // Update position
+            // --- 3D TILT EFFECT ---
+            // Calculate tilt based on movement velocity
+            const tiltX = Math.max(-25, Math.min(25, -moveY * 1.5));
+            const tiltY = Math.max(-25, Math.min(25, moveX * 1.5));
+
+            // Update position and apply 3D transform
             element.style.left = currentX + 'px';
             element.style.top = currentY + 'px';
+            element.style.transform = `scale(1.15) perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            
+            clearTimeout(resetTiltTimeout);
+            resetTiltTimeout = setTimeout(() => {
+                if (isDragging && dragStarted) {
+                    element.style.transform = 'scale(1.15) perspective(800px) rotateX(0deg) rotateY(0deg)';
+                }
+            }, 100);
             
             lastX = clientX;
             lastY = clientY;
@@ -889,6 +902,7 @@ function setupMobileDragElement(element) {
     const endDrag = () => {
         if (!isDragging) return;
         isDragging = false;
+        clearTimeout(resetTiltTimeout);
         
         // If drag actually happened (moved enough), show landing animation
         if (dragStarted) {
@@ -1058,78 +1072,44 @@ window.addEventListener('resize', () => {
 function dragElement(elmnt, header) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     let isDragging = false;
-    let dragMouseMoveHandler, dragMouseUpHandler, dragTouchMoveHandler, dragTouchEndHandler;
     
     if (header) {
         header.addEventListener('mousedown', dragMouseDown);
-        header.addEventListener('touchstart', dragTouchStart, { passive: false });
+        header.addEventListener('touchstart', dragTouchStart);
     } else {
         elmnt.addEventListener('mousedown', dragMouseDown);
-        elmnt.addEventListener('touchstart', dragTouchStart, { passive: false });
+        elmnt.addEventListener('touchstart', dragTouchStart);
     }
 
     function dragMouseDown(e) {
-        if (e.target.closest('.title-right') || e.target.classList.contains('sp-header-icon') || e.target.closest('.speech-bubble-close')) {
-            return;
-        }
         e = e || window.event;
         e.preventDefault();
         isDragging = true;
         pos3 = e.clientX;
         pos4 = e.clientY;
         
-        // Enable GPU acceleration only for non-pixel-face elements
-        if (!elmnt.classList.contains('pixel-face-widget')) {
-            elmnt.style.willChange = 'top, left';
-        }
-        
-        // Prevent text selection during drag
-        document.body.style.userSelect = 'none';
-        document.body.style.webkitUserSelect = 'none';
-        
         // Add dragging class to pixel face for scared expression
         if (elmnt.classList.contains('pixel-face-widget')) {
             elmnt.classList.add('dragging');
         }
         
-        // Create bound handlers to avoid duplicate listeners
-        dragMouseMoveHandler = elementDrag.bind(null);
-        dragMouseUpHandler = closeDragElement.bind(null);
-        
-        document.addEventListener('mousemove', dragMouseMoveHandler);
-        document.addEventListener('mouseup', dragMouseUpHandler);
+        document.addEventListener('mouseup', closeDragElement);
+        document.addEventListener('mousemove', elementDrag);
     }
 
     function dragTouchStart(e) {
-        if (e.target.closest('.title-right') || e.target.classList.contains('sp-header-icon') || e.target.closest('.speech-bubble-close')) {
-            return;
-        }
         e = e || window.event;
-        if (e.cancelable) e.preventDefault();
         isDragging = true;
         pos3 = e.touches[0].clientX;
         pos4 = e.touches[0].clientY;
         
-        // Enable GPU acceleration only for non-pixel-face elements
-        if (!elmnt.classList.contains('pixel-face-widget')) {
-            elmnt.style.willChange = 'top, left';
-        }
-        
-        // Prevent text selection during drag
-        document.body.style.userSelect = 'none';
-        document.body.style.webkitUserSelect = 'none';
-        
         // Add dragging class to pixel face for scared expression
         if (elmnt.classList.contains('pixel-face-widget')) {
             elmnt.classList.add('dragging');
         }
         
-        // Create bound handlers
-        dragTouchMoveHandler = elementDragTouch.bind(null);
-        dragTouchEndHandler = closeDragElement.bind(null);
-        
-        document.addEventListener('touchmove', dragTouchMoveHandler, { passive: false });
-        document.addEventListener('touchend', dragTouchEndHandler, { passive: false });
+        document.addEventListener('touchend', closeDragElement);
+        document.addEventListener('touchmove', elementDragTouch);
     }
 
     function elementDrag(e) {
@@ -1140,50 +1120,24 @@ function dragElement(elmnt, header) {
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        
-        let newTop = elmnt.offsetTop - pos2;
-        let newLeft = elmnt.offsetLeft - pos1;
-        
-        // Boundary constraints to prevent off-screen dragging
-        newTop = Math.max(0, Math.min(newTop, window.innerHeight - elmnt.offsetHeight));
-        newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - elmnt.offsetWidth));
-        
-        elmnt.style.top = newTop + "px";
-        elmnt.style.left = newLeft + "px";
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     }
 
     function elementDragTouch(e) {
         if (!isDragging) return;
         e = e || window.event;
-        if (e.cancelable) e.preventDefault();
+        e.preventDefault();
         pos1 = pos3 - e.touches[0].clientX;
         pos2 = pos4 - e.touches[0].clientY;
         pos3 = e.touches[0].clientX;
         pos4 = e.touches[0].clientY;
-        
-        let newTop = elmnt.offsetTop - pos2;
-        let newLeft = elmnt.offsetLeft - pos1;
-        
-        // Boundary constraints to prevent off-screen dragging
-        newTop = Math.max(0, Math.min(newTop, window.innerHeight - elmnt.offsetHeight));
-        newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - elmnt.offsetWidth));
-        
-        elmnt.style.top = newTop + "px";
-        elmnt.style.left = newLeft + "px";
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     }
 
     function closeDragElement() {
-        if (!isDragging) return;
         isDragging = false;
-        
-        // Disable GPU acceleration after drag (only if it was set)
-        if (!elmnt.classList.contains('pixel-face-widget')) {
-            elmnt.style.willChange = 'auto';
-        }
-        
-        // Restore text selection
-        document.body.style.userSelect = '';
-        document.body.style.webkitUserSelect = '';
         
         // Remove dragging class from pixel face
         if (elmnt.classList.contains('pixel-face-widget')) {
@@ -1208,23 +1162,10 @@ function dragElement(elmnt, header) {
             showPixelFaceMessage(digiMsg, 2000, 'excited');
         }
         
-        // Remove event listeners properly
-        if (dragMouseMoveHandler) {
-            document.removeEventListener('mousemove', dragMouseMoveHandler);
-            dragMouseMoveHandler = null;
-        }
-        if (dragMouseUpHandler) {
-            document.removeEventListener('mouseup', dragMouseUpHandler);
-            dragMouseUpHandler = null;
-        }
-        if (dragTouchMoveHandler) {
-            document.removeEventListener('touchmove', dragTouchMoveHandler);
-            dragTouchMoveHandler = null;
-        }
-        if (dragTouchEndHandler) {
-            document.removeEventListener('touchend', dragTouchEndHandler);
-            dragTouchEndHandler = null;
-        }
+        document.removeEventListener('mouseup', closeDragElement);
+        document.removeEventListener('mousemove', elementDrag);
+        document.removeEventListener('touchend', closeDragElement);
+        document.removeEventListener('touchmove', elementDragTouch);
     }
 }
 
@@ -1240,30 +1181,28 @@ let terminalOriginalState = {
 };
 
 function closeTerminal() {
-    const terminal = document.getElementById('terminal-window');
-    if (terminal) {
-        // Hide the terminal
-        terminal.style.display = 'none';
+    if (terminalWindow) {
+        terminalWindow.style.display = 'none';
         
-        // Reset mobile fullscreen styles
-        terminal.style.width = '';
-        terminal.style.height = '';
-        terminal.style.top = '';
-        terminal.style.left = '';
-        terminal.style.zIndex = '';
+        // Reset to default size and position when closing
+        terminalWindow.style.width = '700px';
+        terminalWindow.style.height = '450px';
+        terminalWindow.style.top = '50px';
+        terminalWindow.style.left = '50px';
+        terminalWindow.style.zIndex = '10';
         
-        // Reset any minimize/maximize states
+        // Reset minimized/maximized states
         isTerminalMinimized = false;
         isTerminalMaximized = false;
         
-        // Reset terminal content display
-        const windowContent = terminal.querySelector('.window-content');
+        // Show window content
+        const windowContent = terminalWindow.querySelector('.window-content');
         if (windowContent) {
             windowContent.style.display = 'block';
         }
         
         // Reset title bar border radius
-        const titleBar = terminal.querySelector('.title-bar');
+        const titleBar = terminalWindow.querySelector('.title-bar');
         if (titleBar) {
             titleBar.style.borderRadius = '8px 8px 0 0';
         }
@@ -1271,11 +1210,10 @@ function closeTerminal() {
 }
 
 function minimizeTerminal() {
-    const terminal = document.getElementById('terminal-window');
-    if (!terminal) return;
+    if (!terminalWindow) return;
     
-    const titleBar = terminal.querySelector('.title-bar');
-    const windowContent = terminal.querySelector('.window-content');
+    const titleBar = terminalWindow.querySelector('.title-bar');
+    const windowContent = terminalWindow.querySelector('.window-content');
     
     if (!windowContent) {
         console.warn('Window content not found');
@@ -1289,7 +1227,7 @@ function minimizeTerminal() {
         if (titleBar) {
             titleBar.style.borderRadius = '8px 8px 0 0';
         }
-        terminal.style.height = terminalOriginalState.height;
+        terminalWindow.style.height = terminalOriginalState.height;
     } else {
         // Minimize
         windowContent.style.display = 'none';
@@ -1297,58 +1235,61 @@ function minimizeTerminal() {
         if (titleBar) {
             titleBar.style.borderRadius = '8px';
         }
-        terminal.style.height = 'auto';
+        terminalWindow.style.height = 'auto';
     }
 }
 
 function maximizeTerminal() {
-    const terminal = document.getElementById('terminal-window');
-    if (!terminal) return;
+    if (!terminalWindow) return;
     
     if (isTerminalMaximized) {
         // Restore to saved size
-        terminal.style.width = terminalOriginalState.width;
-        terminal.style.height = terminalOriginalState.height;
-        terminal.style.top = terminalOriginalState.top;
-        terminal.style.left = terminalOriginalState.left;
-        terminal.style.zIndex = terminalOriginalState.zIndex;
+        terminalWindow.style.width = terminalOriginalState.width;
+        terminalWindow.style.height = terminalOriginalState.height;
+        terminalWindow.style.top = terminalOriginalState.top;
+        terminalWindow.style.left = terminalOriginalState.left;
+        terminalWindow.style.zIndex = terminalOriginalState.zIndex;
         isTerminalMaximized = false;
     } else {
         // Save current state before maximizing
         if (!isTerminalMaximized) {
             terminalOriginalState = {
-                width: terminal.style.width || '700px',
-                height: terminal.style.height || '450px',
-                top: terminal.style.top || '50px',
-                left: terminal.style.left || '50px',
-                zIndex: terminal.style.zIndex || '10'
+                width: terminalWindow.style.width || '700px',
+                height: terminalWindow.style.height || '450px',
+                top: terminalWindow.style.top || '50px',
+                left: terminalWindow.style.left || '50px',
+                zIndex: terminalWindow.style.zIndex || '10'
             };
         }
         
         // Maximize to full screen
-        terminal.style.width = 'calc(100vw - 40px)';
-        terminal.style.height = 'calc(100vh - 80px)';
-        terminal.style.top = '20px';
-        terminal.style.left = '20px';
-        terminal.style.zIndex = '9999';
+        terminalWindow.style.width = 'calc(100vw - 40px)';
+        terminalWindow.style.height = 'calc(100vh - 80px)';
+        terminalWindow.style.top = '20px';
+        terminalWindow.style.left = '20px';
+        terminalWindow.style.zIndex = '9999';
         isTerminalMaximized = true;
     }
 }
 
 function closeMusic() {
-    const music = document.getElementById('music-player');
-    if (music) {
-        // Hide the music player
-        music.style.display = 'none';
+    if (musicPlayerWindow) {
+        musicPlayerWindow.style.display = 'none';
         
-        // Reset mobile fullscreen styles
-        music.style.width = '';
-        music.style.height = '';
-        music.style.top = '';
-        music.style.left = '';
-        music.style.bottom = '';
-        music.style.right = '';
-        music.style.zIndex = '';
+        // Reset to default size and position when closing
+        musicPlayerWindow.style.width = '320px';
+        musicPlayerWindow.style.height = 'auto';
+        musicPlayerWindow.style.bottom = '70px';
+        musicPlayerWindow.style.right = '40px';
+        musicPlayerWindow.style.top = 'auto';
+        musicPlayerWindow.style.left = 'auto';
+        musicPlayerWindow.style.zIndex = '10';
+        
+        // Hide playlist view and show now playing
+        const playlistView = musicPlayerWindow.querySelector('.sp-playlist');
+        const nowPlayingView = musicPlayerWindow.querySelector('#sp-now-playing');
+        if (playlistView) playlistView.style.display = 'none';
+        if (nowPlayingView) nowPlayingView.style.display = 'block';
     }
 }
 
@@ -2119,34 +2060,6 @@ function cycleFaceMode() {
     if (newMode === 'hacker') reaction = 'cool';
     
     showPixelFaceMessage(modeMessages[newMode], 3000, reaction);
-}
-
-// --- DESKTOP WINDOW SHAKE DETECTION ---
-function setupDesktopWindowShake() {
-    let lastScreenX = window.screenX;
-    let lastScreenY = window.screenY;
-    let shakeCount = 0;
-    let shakeTimeout;
-    
-    // Monitor window position changes relative to the actual monitor screen
-    setInterval(() => {
-        const currentX = window.screenX;
-        const currentY = window.screenY;
-        const deltaX = Math.abs(currentX - lastScreenX);
-        const deltaY = Math.abs(currentY - lastScreenY);
-        
-        if (deltaX > 25 || deltaY > 25) { // If window moved more than 25px rapidly
-            shakeCount++;
-            if (shakeCount > 5) {
-                showPixelFaceMessage("Whoa! Earthquake! Stop shaking the browser window! 😵‍💫", 3500, 'dizzy');
-                shakeCount = 0; // Reset
-            }
-            clearTimeout(shakeTimeout);
-            shakeTimeout = setTimeout(() => shakeCount = 0, 500);
-        }
-        lastScreenX = currentX;
-        lastScreenY = currentY;
-    }, 50);
 }
 
 // --- PIXEL FACE EASTER EGGS & SPECIAL REACTIONS ---
@@ -3254,14 +3167,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- PIXEL FACE EASTER EGGS & SPECIAL REACTIONS ---
     setupPixelFaceEasterEggs();
     
-    // --- DESKTOP WINDOW SHAKE ---
-    setupDesktopWindowShake();
-
     // --- PIXEL FACE HELPER SYSTEM ---
     setupPixelFaceHelper();
-    
-    // --- SMART CONTEXT REACTIONS ---
-    setupSmartContextReactions();
     
     // --- MOBILE SWIPE RIGHT GESTURE ---
     setupMobileSwipeGesture();
