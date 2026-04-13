@@ -1523,6 +1523,19 @@ body.reader-mode .sp-content {
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
 }
 
+/* Grid positioning for reordering */
+.n-app-grid .n-pixel-face {
+    order: 1000; /* Move pixel-face to bottom */
+}
+
+.n-app-grid a[href*="instagram.com"] {
+    order: -2; /* Move Instagram to top */
+}
+
+.n-app-grid a[href*="tiktok.com"] {
+    order: -1; /* Move TikTok to top (after Instagram) */
+}
+
 /* Eye animations - blinking */
 .eyes-open {
     animation: blink 4s ease-in-out infinite;
