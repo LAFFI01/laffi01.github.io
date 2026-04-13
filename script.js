@@ -176,11 +176,6 @@ function initializeDisplaySettings() {
         displaySettings.darkMode = e.target.checked;
         applyDisplaySettings();
         saveDisplaySettings();
-        if (e.target.checked) {
-            showPixelFaceMessage("Easy on eyes 🌙", 2500, 'calm');
-        } else {
-            showPixelFaceMessage("Bright! ☀️", 2000, 'happy');
-        }
     });
     
     // Night light toggle
@@ -442,20 +437,6 @@ function processTerminalCommand(command) {
     if (cmd === '' || cmd === ' ') {
         // Empty command, just show next prompt
         response = '';
-    } else if (cmd === 'iloveu') {
-        // Hidden easter egg - doesn't show in help
-        response = `<br>❤️ Aww... I love you too! 🥰`;
-        showPixelFaceMessage("Aww... I love you too! ❤️🥰", 5000, 'loved');
-        const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
-        faces.forEach(face => {
-            face.style.transition = 'transform 0.3s ease';
-            for (let i = 0; i < 6; i++) {
-                setTimeout(() => {
-                    face.style.transform = i % 2 === 0 ? 'scale(1.15)' : 'scale(1)';
-                }, i * 150);
-            }
-            setTimeout(() => { face.style.transform = ''; }, 900);
-        });
     } else if (cmd === 'help' || cmd === '?') {
         response = `<br><strong>Available Commands:</strong>
 <br>  whoami           - Display current user information
@@ -553,6 +534,24 @@ function processTerminalCommand(command) {
         terminalInput.style.cursor = 'not-allowed';
         closeTerminal();
         return;
+    } else if (cmd === 'iloveu') {
+        // Hidden easter egg - doesn't show in help
+        response = `<br>❤️ Aww... I love you too! 🥰`;
+        showPixelFaceMessage("Aww... I love you too! ❤️🥰", 5000, 'loved');
+        const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+        faces.forEach(face => {
+            face.style.transition = 'transform 0.3s ease';
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    face.style.transform = i % 2 === 0 ? 'scale(1.15)' : 'scale(1)';
+                }, i * 150);
+            }
+            setTimeout(() => { face.style.transform = ''; }, 900);
+        });
+    } else if (cmd === 'ihateu') {
+        // Hidden easter egg - sad reaction - doesn't show in help
+        response = `<br>😔 Oh... that really hurt my feelings... 💔`;
+        showPixelFaceMessage("Why would you say that... 😔💔", 4500, 'sad');
     } else {
         response = `<br><strong style="color: #ff6b6b;">Unknown command: ${cmd}</strong>
 <br>Type <strong>help</strong> for available commands`;
@@ -592,11 +591,14 @@ function enableTerminalInput() {
 }
 
 // --- MOBILE VIEWPORT FIX ---
+let lastViewportWidth = window.innerWidth;
 function setMobileHeight() {
-    // Calculate 1% of the actual viewport height
-    let vh = window.innerHeight * 0.01;
-    // Set the value in the --vh custom property to the root of the document
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    // Only update if width changes to prevent UI squishing when mobile keyboard opens
+    if (window.innerWidth !== lastViewportWidth || !document.documentElement.style.getPropertyValue('--vh')) {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        lastViewportWidth = window.innerWidth;
+    }
 }
 
 function initTerminalInput() {
@@ -747,9 +749,9 @@ class MobileAppGrid {
             targetEl.parentNode.insertBefore(element, targetEl);
         }
         
-        // Update the array by correctly shifting elements
-        const [movedElement] = this.elements.splice(draggingIndex, 1);
-        this.elements.splice(targetIndex, 0, movedElement);
+        // Update the array
+        [this.elements[draggingIndex], this.elements[targetIndex]] = 
+        [this.elements[targetIndex], this.elements[draggingIndex]];
         
         return true;
     }
@@ -763,7 +765,7 @@ function initializeMobileDragging() {
     
     // ONLY select elements inside the grid (ignores top clock/music widget)
     const allDraggableElements = Array.from(container.querySelectorAll('.n-app, .n-widget-box'));
-    
+
     appGrid.initialize(allDraggableElements, container);
     
     allDraggableElements.forEach((element) => {
@@ -1037,7 +1039,7 @@ function setupMobileDragElement(element) {
         startDrag(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: true });
     
-    document.addEventListener('touchmove', (e) => {
+    element.addEventListener('touchmove', (e) => {
         if (!isDragging || !e.touches) return;
         if (dragStarted) {
             e.preventDefault(); // Only prevent scroll if actively dragging
@@ -1045,7 +1047,8 @@ function setupMobileDragElement(element) {
         moveDrag(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: false });
     
-    document.addEventListener('touchend', endDrag, { passive: true });
+    element.addEventListener('touchend', endDrag, { passive: true });
+    element.addEventListener('touchcancel', endDrag, { passive: true });
     
     // MOUSE EVENTS (DevTools emulation)
     element.addEventListener('mousedown', (e) => {
@@ -1307,7 +1310,7 @@ function closeMusic() {
         music.style.display = 'none';
         
         // Reset to default size and position when closing
-        music.style.width = '320px';
+        music.style.width = '280px';
         music.style.height = 'auto';
         music.style.bottom = '70px';
         music.style.right = '40px';
@@ -1704,9 +1707,6 @@ function startDancingAnimation() {
     const mobileSVG = document.getElementById('pixelFaceSVG');
     const svgs = [desktopSVG, mobileSVG].filter(s => s !== null);
     
-    // Get mobile pixel face container for body dancing
-    const mobilePixelFaceContainer = document.querySelector('.n-app-grid .n-pixel-face');
-    
     if (svgs.length === 0) return;
     
     let animationStep = 0;
@@ -1717,7 +1717,7 @@ function startDancingAnimation() {
             return;
         }
         
-        // Apply facial animation to all pixel face versions
+        // Apply same animation to all pixel face versions
         svgs.forEach(pixelFaceSVG => {
             const eyesOpen = pixelFaceSVG.querySelector('.eyes-open');
             const eyesClosed = pixelFaceSVG.querySelector('.eyes-closed');
@@ -1784,35 +1784,6 @@ function startDancingAnimation() {
             }
         });
         
-        // Add body dancing to mobile pixel face container
-        if (mobilePixelFaceContainer) {
-            switch (animationStep % 8) {
-                case 0:
-                case 2:
-                    // Bounce up
-                    mobilePixelFaceContainer.style.transform = 'scale(1.1) translateY(-5px)';
-                    break;
-                case 1:
-                case 3:
-                    // Bounce down
-                    mobilePixelFaceContainer.style.transform = 'scale(0.95) translateY(3px)';
-                    break;
-                case 4:
-                    // Slight tilt/head bob
-                    mobilePixelFaceContainer.style.transform = 'scale(1) rotate(-3deg)';
-                    break;
-                case 5:
-                    // Tilt other way
-                    mobilePixelFaceContainer.style.transform = 'scale(1) rotate(3deg)';
-                    break;
-                case 6:
-                case 7:
-                    // Back to normal
-                    mobilePixelFaceContainer.style.transform = 'scale(1) rotate(0deg) translateY(0)';
-                    break;
-            }
-        }
-        
         animationStep++;
     }, 300); // Change expression every 300ms for dancing effect
 }
@@ -1839,11 +1810,6 @@ function toggleMusic() {
             // Reset eyes and mouth to normal
             resetFaceExpression();
         });
-        // Reset mobile pixel face body animations
-        const mobilePixelFaceContainer = document.querySelector('.n-app-grid .n-pixel-face');
-        if (mobilePixelFaceContainer) {
-            mobilePixelFaceContainer.style.transform = 'scale(1) rotate(0deg) translateY(0)';
-        }
     } else {
         audioPlayer.play().catch(err => {
             console.warn('Could not play audio:', err);
@@ -3258,6 +3224,8 @@ document.addEventListener('DOMContentLoaded', function() {
         nTerminalApp.addEventListener('click', () => {
             if (terminalWindow) {
                 terminalWindow.style.display = 'flex';
+                terminalWindow.style.width = 'calc(100vw - 30px)';
+                terminalWindow.style.height = 'calc(var(--vh, 1vh) * 100 - 150px)';
                 terminalWindow.style.top = '60px';
                 terminalWindow.style.left = '15px';
                 terminalWindow.style.zIndex = '9999';
@@ -3270,6 +3238,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const openMobileMusicPlayer = () => {
         if (musicPlayerWindow) {
             musicPlayerWindow.style.display = 'flex';
+            musicPlayerWindow.style.top = '60px';
+            musicPlayerWindow.style.left = '50%';
+            musicPlayerWindow.style.transform = 'translateX(-50%)';
+            musicPlayerWindow.style.width = '280px';
             musicPlayerWindow.style.zIndex = '9999';
         }
     };
@@ -3356,11 +3328,6 @@ function initializeDockTooltips() {
     // Konami Code Reaction
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let konamiIndex = 0;
-    
-    const loveCode = ['i', 'l', 'o', 'v', 'e', 'u'];
-    let loveIndex = 0;
-
-    // Use capturing phase (true) to capture events even when input fields are focused
     document.addEventListener('keydown', (e) => {
         if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
             konamiIndex++;
@@ -3374,38 +3341,10 @@ function initializeDockTooltips() {
                 });
                 konamiIndex = 0;
             }
-        } else if (e.key === konamiCode[0] || e.key.toLowerCase() === konamiCode[0]) {
-            // If wrong key, but it's the first key, start over with index 1
-            konamiIndex = 1;
         } else {
             konamiIndex = 0;
         }
-        
-        // I love U Code Reaction
-        if (e.key.toLowerCase() === loveCode[loveIndex]) {
-            loveIndex++;
-            if (loveIndex === loveCode.length) {
-                showPixelFaceMessage("Aww... I love you too! ❤️🥰", 5000, 'loved');
-                // Add heart pulse animation
-                const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
-                faces.forEach(face => {
-                    face.style.transition = 'transform 0.3s ease';
-                    for (let i = 0; i < 6; i++) {
-                        setTimeout(() => {
-                            face.style.transform = i % 2 === 0 ? 'scale(1.15)' : 'scale(1)';
-                        }, i * 150);
-                    }
-                    setTimeout(() => { face.style.transform = ''; }, 900);
-                });
-                loveIndex = 0;
-            }
-        } else if (e.key.toLowerCase() === loveCode[0]) {
-            // If wrong key, but it's the first letter, start over with index 1
-            loveIndex = 1;
-        } else {
-            loveIndex = 0;
-        }
-    }, true);  // Use capturing phase to work even when input fields are focused
+    });
 }
 
 // --- MATRIX RAIN EFFECT ---
@@ -3506,4 +3445,61 @@ function updateMobileClock() {
 }
 
 setInterval(updateMobileClock, 1000);
+
+// --- CHEAT CODE KEYBOARD LISTENERS ---
+const loveCode = ['i', 'l', 'o', 'v', 'e', 'u'];
+const hateCode = ['i', 'h', 'a', 't', 'e', 'u'];
+let loveIndex = 0;
+let hateIndex = 0;
+
+document.addEventListener('keydown', (e) => {
+    // I love U Code Reaction
+    if (e.key.toLowerCase() === loveCode[loveIndex]) {
+        loveIndex++;
+        if (loveIndex === loveCode.length) {
+            loveIndex = 0;
+            const loveMessage = "Aww... I love you too! ❤️🥰";
+            showPixelFaceMessage(loveMessage, 5000, 'loved');
+            
+            const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+            faces.forEach(face => {
+                face.style.transition = 'transform 0.3s ease';
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(() => {
+                        face.style.transform = i % 2 === 0 ? 'scale(1.15)' : 'scale(1)';
+                    }, i * 150);
+                }
+                setTimeout(() => { face.style.transform = ''; }, 900);
+            });
+        }
+    } else {
+        if (loveCode[0] === e.key.toLowerCase()) {
+            loveIndex = 1;
+        } else {
+            loveIndex = 0;
+        }
+    }
+    
+    // I hate U Code Reaction
+    if (e.key.toLowerCase() === hateCode[hateIndex]) {
+        hateIndex++;
+        if (hateIndex === hateCode.length) {
+            hateIndex = 0;
+            const hateMessage = "Why would you say that... 😔💔";
+            showPixelFaceMessage(hateMessage, 4500, 'sad');
+            
+            const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+            faces.forEach(face => {
+                face.classList.add('sad-reaction');
+                setTimeout(() => face.classList.remove('sad-reaction'), 4500);
+            });
+        }
+    } else {
+        if (hateCode[0] === e.key.toLowerCase()) {
+            hateIndex = 1;
+        } else {
+            hateIndex = 0;
+        }
+    }
+}, true);  // Use capturing phase to work even when input fields are focused
 updateMobileClock();
