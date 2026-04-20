@@ -603,6 +603,20 @@ function processTerminalCommand(command) {
         // Hidden easter egg - sad reaction - doesn't show in help
         response = `<br>😔 Oh... that really hurt my feelings... 💔`;
         showPixelFaceMessage("Why would you say that... 😔💔", 4500, 'sad');
+    } else if (cmd === 'bindu') {
+        // Secret easter egg - blush reaction
+        // When love calls your name, you gotta respond! 💕
+        response = `<br>💕 Ooo... my love! 🥰✨`;
+        showPixelFaceMessage("Ooo... my love! 💕🥰", 5000, 'loved');
+        const faces = document.querySelectorAll('.pixel-face-widget, .n-pixel-face');
+        faces.forEach(face => {
+            // Add blush effect
+            face.style.filter = 'drop-shadow(0 0 20px rgba(255, 105, 180, 0.8))';
+            face.style.transition = 'filter 0.3s ease';
+            setTimeout(() => {
+                face.style.filter = 'drop-shadow(0 0 0px rgba(255, 105, 180, 0))';
+            }, 3000);
+        });
     } else {
         response = `<br><strong style="color: #ff6b6b;">Unknown command: ${cmd}</strong>
 <br>Type <strong>help</strong> for available commands`;
