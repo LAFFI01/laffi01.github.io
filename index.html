@@ -31,7 +31,7 @@
         <div class="desktop-widget pixel-face-widget">
             <svg width="120px" height="120px" viewBox="0 0 64 64" preserveAspectRatio="xMidYMid meet" class="pixel-face-svg" id="pixelFaceSVGDesktop">
                 <!-- Face background -->
-                <rect x="8" y="8" width="48" height="48" fill="#000000" stroke="#FFFFFF" stroke-width="2"/>
+                <rect class="face-base" x="8" y="8" width="48" height="48" fill="#000000" stroke="#FFFFFF" stroke-width="2"/>
                 
                 <!-- Eyes group -->
                 <g class="eyes eyes-open">
@@ -95,6 +95,22 @@
                     </g>
                 </g>
                 
+                <!-- Spidey Eyes & Web Pattern (Hidden by default) -->
+                <g class="spidey-eyes" style="opacity: 0;">
+                    <g stroke="#000000" stroke-width="1.5" opacity="0.3">
+                        <line x1="32" y1="8" x2="32" y2="56" />
+                        <line x1="8" y1="32" x2="56" y2="32" />
+                        <line x1="12" y1="12" x2="52" y2="52" />
+                        <line x1="12" y1="52" x2="52" y2="12" />
+                        <circle cx="32" cy="32" r="10" fill="none" />
+                        <circle cx="32" cy="32" r="18" fill="none" />
+                    </g>
+                    <!-- Left eye -->
+                    <path d="M 30 32 Q 25 18 10 22 Q 18 38 30 32 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+                    <!-- Right eye -->
+                    <path d="M 34 32 Q 39 18 54 22 Q 46 38 34 32 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+                </g>
+
                 <!-- Eyebrows group -->
                 <g class="eyebrows eyebrows-neutral" style="opacity: 1;">
                     <!-- Left eyebrow -->
@@ -258,7 +274,7 @@
             <div class="n-widget-box n-pixel-face" style="grid-column: span 2; grid-row: span 2; position: relative;" data-label="LAFFI">
                 <svg width="100%" height="100%" viewBox="0 0 64 64" style="max-width: 100%; max-height: 100%;" class="pixel-face-svg" id="pixelFaceSVG">
                     <!-- Face background -->
-                    <rect x="8" y="8" width="48" height="48" fill="#000000" stroke="#FFFFFF" stroke-width="2"/>
+                    <rect class="face-base" x="8" y="8" width="48" height="48" fill="#000000" stroke="#FFFFFF" stroke-width="2"/>
                     
                     <!-- Eyes group -->
                     <g class="eyes eyes-open">
@@ -322,6 +338,22 @@
                         </g>
                     </g>
                     
+                    <!-- Spidey Eyes & Web Pattern (Hidden by default) -->
+                    <g class="spidey-eyes" style="opacity: 0;">
+                        <g stroke="#000000" stroke-width="1.5" opacity="0.3">
+                            <line x1="32" y1="8" x2="32" y2="56" />
+                            <line x1="8" y1="32" x2="56" y2="32" />
+                            <line x1="12" y1="12" x2="52" y2="52" />
+                            <line x1="12" y1="52" x2="52" y2="12" />
+                            <circle cx="32" cy="32" r="10" fill="none" />
+                            <circle cx="32" cy="32" r="18" fill="none" />
+                        </g>
+                        <!-- Left eye -->
+                        <path d="M 30 32 Q 25 18 10 22 Q 18 38 30 32 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+                        <!-- Right eye -->
+                        <path d="M 34 32 Q 39 18 54 22 Q 46 38 34 32 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+                    </g>
+
                     <!-- Eyebrows group -->
                     <g class="eyebrows eyebrows-neutral" style="opacity: 1;">
                         <!-- Left eyebrow -->
@@ -408,7 +440,7 @@
                     </svg>
                 </div>
             </a>
-            <a href="https://www.youtube.com/@IAMAI-f5k?sub_confirmation=1" target="_blank" class="n-app" data-label="YouTube">
+            <a href="https://www.youtube.com/@laffi_01?sub_confirmation=1" target="_blank" class="n-app" data-label="YouTube">
                 <div class="n-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
                         <path d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z"/>
@@ -568,7 +600,7 @@
                     </svg>
                 </a>
 
-                <a href="https://www.youtube.com/@IAMAI-f5k?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="dock-icon" title="YouTube" aria-label="Visit YouTube channel">
+                <a href="https://www.youtube.com/@laffi_01?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="dock-icon" title="YouTube" aria-label="Visit YouTube channel">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="white" aria-hidden="true">
                         <path d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z"/>
                     </svg>
@@ -708,6 +740,7 @@
         <source id="audio-source" src="music/hit-the-road.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    <audio id="web-sound" src="music/web-shoot.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>

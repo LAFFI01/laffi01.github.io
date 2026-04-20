@@ -2360,6 +2360,55 @@ body.reader-mode .sp-content {
 .pixel-face-widget.mode-focus .eyes-open, .n-pixel-face.mode-focus .eyes-open { opacity: 0 !important; }
 .pixel-face-widget.mode-focus .eyes-closed, .n-pixel-face.mode-focus .eyes-closed { opacity: 1 !important; }
 
+/* Spider-Man Mode */
+.pixel-face-widget.mode-spidey .face-base,
+.n-pixel-face.mode-spidey .face-base {
+    fill: #d32f2f !important;
+    stroke: #000000 !important;
+}
+
+.pixel-face-widget.mode-spidey .eyes,
+.pixel-face-widget.mode-spidey .eyebrows,
+.pixel-face-widget.mode-spidey .mouth,
+.n-pixel-face.mode-spidey .eyes,
+.n-pixel-face.mode-spidey .eyebrows,
+.n-pixel-face.mode-spidey .mouth {
+    opacity: 0 !important;
+    animation: none !important;
+}
+
+.pixel-face-widget.mode-spidey .spidey-eyes,
+.n-pixel-face.mode-spidey .spidey-eyes {
+    opacity: 1 !important;
+}
+
+.pixel-face-widget.mode-spidey, .n-pixel-face.mode-spidey {
+    filter: drop-shadow(0 4px 12px rgba(211, 47, 47, 0.6)) !important;
+}
+
+/* Web Shooting Effects */
+.spidey-web-line {
+    position: fixed;
+    height: 2px;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 2px #ccc;
+    transform-origin: 0 50%;
+    z-index: 9998;
+    pointer-events: none;
+    transition: width 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+}
+
+.spidey-web-splat {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, rgba(255,255,255,1) 10%, rgba(255,255,255,0.4) 40%, transparent 80%);
+    border-radius: 50%;
+    z-index: 9998;
+    pointer-events: none;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
 /* Mobile carousel adjustments */
 @media (max-width: 400px) {
     .n-icon {

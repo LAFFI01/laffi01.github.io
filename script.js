@@ -18,11 +18,31 @@ const userProfiles = [
         username: 'laffi',
         hostname: 'BABE',
         email: 'khatrijr01@gmail.com',
-        bio: ' Calisthenics |  | Fitness & Wellness | Bodyweight Training | Outdoor Workouts'
+        bio: ' Calisthenics | Fitness & Wellness | Bodyweight Training | Outdoor Workouts'
     }
 ];
 
-let currentUser = userProfiles[0]; // Default to LAFFI_01
+// --- DETECT USER FROM URL PARAMETER ---
+function getDefaultUser() {
+    const params = new URLSearchParams(window.location.search);
+    const userParam = params.get('user');
+    
+    if (userParam) {
+        const lowerParam = userParam.toLowerCase();
+        
+        // Match by name: 'code' or 'fit'
+        if (lowerParam === 'code') {
+            return userProfiles.find(p => p.id === 'TEK_LAFFI_01') || userProfiles[0];
+        } else if (lowerParam === 'fit') {
+            return userProfiles.find(p => p.id === 'FIT_LAFFI_01') || userProfiles[0];
+        }
+    }
+    
+    // Default to first profile if no valid parameter
+    return userProfiles[0];
+}
+
+let currentUser = getDefaultUser();
 let currentVolume = 100;
 
 // --- VOLUME CONTROL FUNCTIONALITY ---
@@ -449,7 +469,7 @@ function processTerminalCommand(command) {
 <br>  echo [text]      - Print text
 <br>  date             - Show current date and time
 <br>  matrix           - Wake up, Neo...
-<br>  mode [name]      - Set face mode (standard, party, hacker, focus)
+<br>  mode [name]      - Set face mode (standard, party, hacker, focus, spidey)
 <br>  exit             - Close the terminal
 <br>  help             - Show this help message`;
     } else if (cmd === 'whoami') {
@@ -498,7 +518,29 @@ function processTerminalCommand(command) {
         response = `<br>Entering the Matrix...`;
     } else if (cmd.startsWith('mode ')) {
         const requestedMode = cmd.substring(5).trim();
-        if (faceModes.includes(requestedMode)) {
+        const currentMode = faceModes[currentFaceModeIndex];
+        const audioPlayer = document.getElementById('backgroundMusic');
+        
+        // Check if user is toggling OFF the same mode
+        if (requestedMode === currentMode && requestedMode !== 'standard') {
+            const desktopFace = document.querySelector('.pixel-face-widget');
+            const mobileFace = document.querySelector('.n-pixel-face');
+            const faces = [desktopFace, mobileFace].filter(f => f !== null);
+            
+            faces.forEach(face => {
+                faceModes.forEach(m => face.classList.remove(`mode-${m}`));
+            });
+            currentFaceModeIndex = 0; // Back to standard
+            
+            // Stop music if spidey mode was deactivated
+            if (requestedMode === 'spidey' && audioPlayer) {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+            }
+            
+            showPixelFaceMessage(`${requestedMode} mode deactivated! Back to standard. 😊`, 2500, 'happy');
+            response = `<br><strong>${requestedMode}</strong> mode deactivated!`;
+        } else if (faceModes.includes(requestedMode)) {
             const desktopFace = document.querySelector('.pixel-face-widget');
             const mobileFace = document.querySelector('.n-pixel-face');
             const faces = [desktopFace, mobileFace].filter(f => f !== null);
@@ -513,17 +555,26 @@ function processTerminalCommand(command) {
                 'standard': "Standard Mode! Let's go! 😊",
                 'party': "Party Mode! Let's dance! 🎉🎶",
                 'hacker': "Hacker Mode activated... 💻🕶️",
-                'focus': "Focus Mode... Zzz... 🤫"
+                'focus': "Focus Mode... Zzz... 🤫",
+                'spidey': "My Spidey-Sense is tingling! 🕸️🕷️ Click anywhere!"
             };
             let reaction = 'normal';
             if (requestedMode === 'party') reaction = 'excited';
             if (requestedMode === 'focus') reaction = 'sleeping';
             if (requestedMode === 'hacker') reaction = 'cool';
+            if (requestedMode === 'spidey') reaction = 'excited';
+            
+            // Play "AM I DREAMING" music for spidey mode
+            if (requestedMode === 'spidey' && audioPlayer) {
+                audioPlayer.src = 'music/am-i-dreaming.mp3';
+                audioPlayer.currentTime = 0;
+                audioPlayer.play().catch(err => console.warn('Music play failed:', err));
+            }
             
             showPixelFaceMessage(modeMessages[requestedMode], 3000, reaction);
             response = `<br>Face mode set to: <strong>${requestedMode}</strong>`;
         } else {
-            response = `<br><strong style="color: #ff6b6b;">Unknown mode. Available modes: standard, party, hacker, focus</strong>`;
+        response = `<br><strong style="color: #ff6b6b;">Unknown mode. Available modes: standard, party, hacker, focus, spidey</strong>`;
         }
     } else if (cmd === 'exit') {
         terminalOutput.innerHTML += `<br>${prompt} exit`;
@@ -2060,7 +2111,7 @@ function setupEyesFollowCursor() {
 }
 
 // --- PIXEL FACE MODES ---
-const faceModes = ['standard', 'party', 'hacker', 'focus'];
+const faceModes = ['standard', 'party', 'hacker', 'focus', 'spidey'];
 let currentFaceModeIndex = 0;
 
 function cycleFaceMode() {
@@ -2084,13 +2135,15 @@ function cycleFaceMode() {
         'standard': "Standard Mode! Let's go! 😊",
         'party': "Party Mode! Let's dance! 🎉🎶",
         'hacker': "Hacker Mode activated... 💻🕶️",
-        'focus': "Focus Mode... Zzz... 🤫"
+        'focus': "Focus Mode... Zzz... 🤫",
+        'spidey': "My Spidey-Sense is tingling! 🕸️🕷️ Click anywhere!"
     };
     
     let reaction = 'normal';
     if (newMode === 'party') reaction = 'excited';
     if (newMode === 'focus') reaction = 'sleeping';
     if (newMode === 'hacker') reaction = 'cool';
+    if (newMode === 'spidey') reaction = 'excited';
     
     showPixelFaceMessage(modeMessages[newMode], 3000, reaction);
 }
@@ -3052,6 +3105,72 @@ function setupMobileSwipeGesture() {
     }
 }
 
+// --- SPIDER-MAN WEB SHOOTING LOGIC ---
+function setupSpideyWebShooter() {
+    document.addEventListener('click', (e) => {
+        // Only shoot if spidey mode is active
+        if (faceModes[currentFaceModeIndex] !== 'spidey') return;
+
+        // Avoid shooting if clicking on the faces, windows, or docks themselves
+        if (e.target.closest('.pixel-face-widget') || 
+            e.target.closest('.n-pixel-face') || 
+            e.target.closest('.window') || 
+            e.target.closest('.panel') || 
+            e.target.closest('.n-status-bar')) {
+            return;
+        }
+
+        const desktopFace = document.querySelector('.pixel-face-widget');
+        const mobileFace = document.querySelector('.n-pixel-face');
+        
+        let activeFace = (window.innerWidth > 768 && desktopFace) ? desktopFace : mobileFace;
+        
+        if (activeFace) {
+            const rect = activeFace.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+            const web = document.createElement('div');
+            web.className = 'spidey-web-line';
+            web.style.left = startX + 'px';
+            web.style.top = startY + 'px';
+            web.style.width = '0px'; 
+            web.style.transform = `rotate(${angle}deg)`;
+            document.body.appendChild(web);
+            
+            const splat = document.createElement('div');
+            splat.className = 'spidey-web-splat';
+            splat.style.left = (e.clientX - 15) + 'px';
+            splat.style.top = (e.clientY - 15) + 'px';
+            splat.style.transform = 'scale(0)';
+            document.body.appendChild(splat);
+
+            setTimeout(() => web.style.width = distance + 'px', 10);
+            setTimeout(() => splat.style.transform = 'scale(1)', 150);
+
+            // Web sound disabled - add your own web-shoot.mp3 if you want sound
+            // const webSound = document.getElementById('web-sound');
+            // if (webSound) {
+            //     webSound.currentTime = 0;
+            //     webSound.play().catch(err => console.warn('Web sound play failed:', err));
+            // }
+
+            if (Math.random() < 0.4) showPixelFaceMessage("Thwip! 🕸️", 1000, 'excited');
+
+            setTimeout(() => {
+                web.style.opacity = '0';
+                splat.style.opacity = '0';
+                setTimeout(() => { web.remove(); splat.remove(); }, 300);
+            }, 1500);
+        }
+    });
+}
+
 // Initialize all functionality on page load (consolidated DOMContentLoaded)
 document.addEventListener('DOMContentLoaded', function() {
     // Load playlist from JSON file
@@ -3196,6 +3315,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- PIXEL FACE DODGE & MOVEMENT ---
     setupPixelFaceDodge();
+    
+    // --- SPIDER-MAN WEB SHOOTING ---
+    setupSpideyWebShooter();
     
     // --- PIXEL FACE EASTER EGGS & SPECIAL REACTIONS ---
     setupPixelFaceEasterEggs();
