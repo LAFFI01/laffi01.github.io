@@ -103,7 +103,7 @@ function initializeVolumeControl() {
         }
         updateVolumeSliderFill();
         saveVolumeToSessionStorage();
-        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🤫", 2000, 'cute');
+        if (typeof showPixelFaceMessage === 'function') showPixelFaceMessage("Shhh... Going quiet mode! 🔇", 2000, 'cute');
     });
     
     // Max volume button
@@ -401,16 +401,16 @@ function typeTerminal() {
         { delay: 400, content: `<br>${currentUser.name}` },
         { delay: 250, content: `<br>${prompt} cat profile.txt` },
         { delay: 600, content: '<br>─────────────────────────────────' },
-        { delay: 150, content: `<br>📊 <strong>${currentUser.role}</strong>` },
+        { delay: 150, content: `<br>⭐ <strong>${currentUser.role}</strong>` },
         { delay: 150, content: `<br>${currentUser.bio.split(' | ')[0]}` },
         { delay: 150, content: `<br>${currentUser.bio.split(' | ')[1]}` },
         { delay: 150, content: `<br>${currentUser.bio.split(' | ')[2]}` },
         { delay: 150, content: `<br>${currentUser.bio.split(' | ').slice(3).join(' | ')}` },
         { delay: 150, content: '<br>─────────────────────────────────' },
         { delay: 250, content: `<br>${prompt} contact` },
-        { delay: 300, content: `<br>📧 ${currentUser.email}` },
-        { delay: 150, content: '<br>💼 Open to: Freelance · Full-time' },
-        { delay: 150, content: '<br>🌍 Remote' }
+        { delay: 300, content: `<br>✉️ ${currentUser.email}` },
+        { delay: 150, content: `<br>🤝 Open to: ${currentUser.id === 'FIT_LAFFI_01' ? 'Collaboration' : 'Freelance · Full-time'}` },
+        { delay: 150, content: '<br>🌐 Remote' }
     ];
     
     let profileIndex = 0;
@@ -476,16 +476,16 @@ function processTerminalCommand(command) {
         response = `<br>${currentUser.name}`;
     } else if (cmd === 'profile') {
         response = `<br>─────────────────────────────────
-<br>📊 <strong>${currentUser.role}</strong>
+<br>⭐ <strong>${currentUser.role}</strong>
 <br>${currentUser.bio.split(' | ')[0]}
 <br>${currentUser.bio.split(' | ')[1]}
 <br>${currentUser.bio.split(' | ')[2]}
 <br>${currentUser.bio.split(' | ').slice(3).join(' | ')}
 <br>─────────────────────────────────`;
     } else if (cmd === 'contact') {
-        response = `<br>📧 Email: ${currentUser.email}
-<br>💼 Open to: Freelance · Full-time
-<br>🌍 Location: Remote`;
+        response = `<br>✉️ Email: ${currentUser.email}
+<br>🤝 Open to: ${currentUser.id === 'FIT_LAFFI_01' ? 'Collaboration' : 'Freelance · Full-time'}
+<br>🌐 Location: Remote`;
     } else if (cmd === 'skills') {
         response = `<br><strong>Technical Skills:</strong>
 <br>  Languages: JavaScript, Python, HTML5, CSS3
@@ -553,9 +553,9 @@ function processTerminalCommand(command) {
             
             const modeMessages = {
                 'standard': "Standard Mode! Let's go! 😊",
-                'party': "Party Mode! Let's dance! 🎉🎶",
+                'party': "Party Mode! Let's dance! �🎶",
                 'hacker': "Hacker Mode activated... 💻🕶️",
-                'focus': "Focus Mode... Zzz... 🤫",
+                'focus': "Focus Mode... Zzz... 😴",
                 'spidey': "My Spidey-Sense is tingling! 🕸️🕷️ Click anywhere!"
             };
             let reaction = 'normal';
@@ -714,6 +714,58 @@ if (musicPlayerWindow) {
 const pixelFaceWidget = document.querySelector('.pixel-face-widget');
 if (pixelFaceWidget) {
     dragElement(pixelFaceWidget, pixelFaceWidget); // Widget can be dragged from anywhere
+}
+
+// --- TERMINAL BUTTONS ARE HANDLED VIA INLINE ONCLICK ATTRIBUTES ---
+// But we add explicit listeners for mobile support by selecting via title attribute
+function bindTerminalButtons() {
+    const titleRight = document.querySelector('#terminal-header .title-right');
+    if (!titleRight) return;
+    
+    // Select buttons by their title attribute for reliability
+    const closeBtn = titleRight.querySelector('span[title="Close"]');
+    const minimizeBtn = titleRight.querySelector('span[title="Minimize"]');
+    
+    if (closeBtn) {
+        // Force the onclick to work and add backup events
+        closeBtn.onclick = function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            closeTerminal();
+        };
+        
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            closeTerminal();
+        }, true);
+        
+        closeBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeTerminal();
+        }, true);
+    }
+    
+    if (minimizeBtn) {
+        minimizeBtn.onclick = function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            minimizeTerminal();
+        };
+        
+        minimizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            minimizeTerminal();
+        }, true);
+        
+        minimizeBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            minimizeTerminal();
+        }, true);
+    }
 }
 
 // --- MOBILE APP & WIDGET DRAGGING SETUP ---
@@ -1189,9 +1241,13 @@ function dragElement(elmnt, header) {
     }
 
     function dragTouchStart(e) {
-        if (e.target.closest('.title-right') || e.target.classList.contains('sp-header-icon') || e.target.closest('.speech-bubble-close')) {
+        // Check if touch started on a button or interactive element
+        const isOnButton = e.target.closest('.title-right span') || e.target.closest('.sp-header-icon') || e.target.closest('.speech-bubble-close');
+        if (isOnButton) {
+            // Don't consume this event - let it propagate to the button handler
             return;
         }
+        
         e = e || window.event;
         isDragging = true;
         pos3 = e.touches[0].clientX;
@@ -2147,9 +2203,9 @@ function cycleFaceMode() {
     
     const modeMessages = {
         'standard': "Standard Mode! Let's go! 😊",
-        'party': "Party Mode! Let's dance! 🎉🎶",
+        'party': "Party Mode! Let's dance! 🎊🎶",
         'hacker': "Hacker Mode activated... 💻🕶️",
-        'focus': "Focus Mode... Zzz... 🤫",
+        'focus': "Focus Mode... Zzz... 😴",
         'spidey': "My Spidey-Sense is tingling! 🕸️🕷️ Click anywhere!"
     };
     
@@ -3308,6 +3364,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- TERMINAL INPUT ---
     initTerminalInput();
     
+    // --- BIND TERMINAL BUTTONS ---
+    bindTerminalButtons();
+    
     // --- SHOW TERMINAL INTRO ON PAGE LOAD ---
     const terminalWindow = document.getElementById('terminal-window');
     if (terminalWindow) {
@@ -3366,6 +3425,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 terminalWindow.style.left = '15px';
                 terminalWindow.style.zIndex = '9999';
                 enableTerminalInput();
+                // Ensure button handlers are active 
+                bindTerminalButtons();
             }
         });
     }
